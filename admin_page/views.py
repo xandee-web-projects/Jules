@@ -64,7 +64,7 @@ def update_blog(request):
             blog.desc = desc
             blog.date = parse_date(date)
             if photo:
-                os.remove(blog.photo.path)
+                del_photo(blog.photo)
                 blog.photo = photo
             blog.save()
     return redirect('edit_blogs')
@@ -74,7 +74,7 @@ def update_blog(request):
 def delete_blog(request, id):
     blog = Blog.objects.get(id=id)
     if blog:
-        os.remove(blog.photo.path)
+        del_photo(blog.photo)
         blog.delete()
     return redirect('edit_blogs')
 
@@ -137,7 +137,7 @@ def update_staff(request):
 def delete_staff(request, id):
     staff = Staff.objects.filter(username=id).first()
     if staff:
-        os.remove(staff.photo.path)
+        del_photo(staff.photo)
         staff.delete()
     return HttpResponse()
 
@@ -177,7 +177,12 @@ def accept_photo(request, id):
 def discard_photo(request, id):
     photo = PendingPhoto.objects.get(id=id)
     if photo:
-        if len(photo.photo)>0:
-            os.remove(photo.photo.path)
+        del_photo(photo.photo)
         photo.delete()
     return JsonResponse("ok", safe=False)
+
+def del_photo(photo):
+    try:
+        os.remove(photo.path)
+    except:
+        pass
