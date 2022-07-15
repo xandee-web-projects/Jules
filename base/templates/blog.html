@@ -1,0 +1,30 @@
+{% extends 'base.html' %} {% load static %} {% block title %}Blog{% endblock %} {% block content%}
+<section class="ftco-section bg-light">
+	<div class="container">
+		<div class="row">
+			{% for b in blogs %}
+			<div class="col-md-6 col-lg-4 ftco-animate">
+				<div class="blog-entry">
+					<a
+						class="block-20 d-flex align-items-end"
+						style="background-image: url({{ url_for('views.get_photo', filename=b.photo %});"
+					>
+						<div class="meta-date text-center p-2">
+							<span class="day">{{b.date}}</span>
+							<span class="mos">{{b.month}}</span>
+							<span class="yr">{{b.year}}</span>
+						</div>
+					</a>
+					<div class="text bg-white p-4">
+						<h3 class="heading">
+							<a>{{b.heading}}</a>
+						</h3>
+						<p>{{b.desc}}</p>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</section>
+{% endblock %}
