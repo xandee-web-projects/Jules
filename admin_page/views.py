@@ -158,6 +158,19 @@ def messages(request):
 
 @login_required
 @admin_login_required
+def delete_message(request, id):
+    m = Message.objects.get(id=id)
+    if m:
+        m.delete()
+    return JsonResponse("ok", safe=False)
+
+@login_required
+@admin_login_required
+def randoms(request, id):
+    return redirect('messages')
+
+@login_required
+@admin_login_required
 def pending_photos(request):
     return render(request, 'admin-page/pending-photos.html', {"pending_photos": PendingPhoto.objects.all()})
 

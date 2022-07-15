@@ -15,10 +15,13 @@ urlpatterns = [
     path("update-staff/", views.update_staff, name="update_staff"),
     path("delete-staff/<str:id>", views.delete_staff, name="delete_staff"),
 
-
     path("classes/", views.classes, name="classes"),
     path("pupils/", views.pupils, name="pupils"),
     path("messages/", views.messages, name="messages"),
+    path("delete-message/<int:id>", views.delete_message, name="delete_message"),
+
+    path("randoms/", views.randoms, name="randoms"),
+    
 
     path("discard-photo/<int:id>", views.discard_photo, name="discard_photo"),
     path("pending-photos/", views.pending_photos, name="pending_photos"),
