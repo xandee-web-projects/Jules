@@ -5,30 +5,47 @@
         <div class="container">
             <div class="row removable">
                 <div class="col-md-8 ms-auto me-auto text-center">
-
-
+                    <h3 class="">Contact</h3>
+                    <p class="">Messages from the contact us menu in the main website will show here</p>
                 </div>
             </div>
             <div class="row mt-lg-5 mt-4 removable">
+                {% for msg in messages %}
                 <div class="col-lg-4 col-md-6 mb-5">
                     <div class="card mb-3">
-                        <div class="ps-4 mt-n4">
-                            <div class="icon icon-lg icon-shape bg-gradient-primary shadow-primary shadow text-center border-radius-xl">
-                                <i class="material-icons opacity-10">manage_accounts</i>
-                            </div>
-                        </div>
                         <div class="card-body border-radius-lg position-relative overflow-hidden pb-4">
-                            <h5 class="mt-2">Slack bot</h5>
-                            <p class="mb-3">If everything I did failed - which it doesn't, it actually succeeds - just the fact that I'm willing to fail is an inspiration. People are so scared to lose that they don't even try. And this is sad.</p>
-                            <a href="javascript:;" class="font-weight-bold text-xs text-uppercase font-weight-bolder text-primary icon-move-right">
-                                Check more
+                            <h5 class="mt-2">{{msg.name}} • {{msg.contact}}</h5>
+                            <p class="mb-3" id="full{{msg.id}}" hidden>{{ msg.message }}</p>
+                            <p class="mb-3" id="msg{{msg.id}}">{{ msg.message|truncatechars:100 }}<span id="dots{{msg.id}}">...</span></p>
+                            <a href="javascript:;" onclick="readMore({{msg.id}})" id="{{msg.id}}" class="font-weight-bold text-xs text-uppercase font-weight-bolder text-primary icon-move-right">
+                                Read more
                                 <i class="fas fa-arrow-right text-xs ms-1" aria-hidden="true"></i>
                             </a>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
         </div>
     </section>
 </div>
+<script>
+    function readMore(id) {
+      var btnText = document.getElementById(id);
+      var moreText = $('#full'+id).html()
+      var dots = document.getElementById("dots"+id)
+
+      if (dots.style.display === "none") {
+        dots.style.display = "inline";
+        btnText.innerHTML = "Read more"; 
+        $('#full'+id).prop("hidden", true);
+        $('#msg'+id).prop("hidden", false);
+      } else {
+        dots.style.display = "none";
+        btnText.innerHTML = "Read less"; 
+        $('#full'+id).prop("hidden", false);
+        $('#msg'+id).prop("hidden", true);
+      }
+    }
+    </script>
 {% endblock %}

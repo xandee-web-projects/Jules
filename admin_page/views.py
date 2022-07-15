@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils.dateparse import parse_date
 from portal.models import PendingPhoto, Staff, User
-from .models import Blog
+from .models import Blog, Message
 from datetime import date
 import string, random
 
@@ -150,6 +150,11 @@ def classes(request):
 @admin_login_required
 def pupils(request):
     return render(request, 'admin-page/pupils.html')
+
+@login_required
+@admin_login_required
+def messages(request):
+    return render(request, 'admin-page/messages.html', {'messages':Message.objects.all().order_by('-time')})
 
 @login_required
 @admin_login_required

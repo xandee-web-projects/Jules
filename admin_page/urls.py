@@ -18,6 +18,7 @@ urlpatterns = [
 
     path("classes/", views.classes, name="classes"),
     path("pupils/", views.pupils, name="pupils"),
+    path("messages/", views.messages, name="messages"),
 
     path("discard-photo/<int:id>", views.discard_photo, name="discard_photo"),
     path("pending-photos/", views.pending_photos, name="pending_photos"),
