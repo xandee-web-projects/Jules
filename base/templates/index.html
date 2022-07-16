@@ -393,11 +393,12 @@
 <section class="ftco-gallery">
 	<div class="container-wrap">
 		<div class="row no-gutters">
+			{% for r in randoms	%}
 			<div class="col-md-3 ftco-animate">
 				<a
-					href="{% static 'images/image_1.jpg' %}"
+					href="{% static r.photo %}"
 					class="gallery image-popup img d-flex align-items-center"
-					style="background-image: url({% static 'images/course-1.jpg' %})"
+					style="background-image: url({% static r.photo %})"
 				>
 					<div
 						class="icon mb-4 d-flex align-items-center justify-content-center"
@@ -406,45 +407,7 @@
 					</div>
 				</a>
 			</div>
-			<div class="col-md-3 ftco-animate">
-				<a
-					href="{% static 'images/image_2.jpg' %}"
-					class="gallery image-popup img d-flex align-items-center"
-					style="background-image: url({% static 'images/image_2.jpg' %})"
-				>
-					<div
-						class="icon mb-4 d-flex align-items-center justify-content-center"
-					>
-						<span class="icon-instagram"></span>
-					</div>
-				</a>
-			</div>
-			<div class="col-md-3 ftco-animate">
-				<a
-					href="{% static 'images/image_3.jpg' %}"
-					class="gallery image-popup img d-flex align-items-center"
-					style="background-image: url({% static 'images/image_3.jpg' %})"
-				>
-					<div
-						class="icon mb-4 d-flex align-items-center justify-content-center"
-					>
-						<span class="icon-instagram"></span>
-					</div>
-				</a>
-			</div>
-			<div class="col-md-3 ftco-animate">
-				<a
-					href="{% static 'images/image_4.jpg' %}"
-					class="gallery image-popup img d-flex align-items-center"
-					style="background-image: url({% static 'images/image_4.jpg' %})"
-				>
-					<div
-						class="icon mb-4 d-flex align-items-center justify-content-center"
-					>
-						<span class="icon-instagram"></span>
-					</div>
-				</a>
-			</div>
+			{% endfor %}
 		</div>
 	</div>
 </section>

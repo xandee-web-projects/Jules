@@ -1,11 +1,17 @@
 from django.shortcuts import render
-from pkg_resources import require
-
-from admin_page.models import Blog, Message
+from random import randint
+from admin_page.models import Blog, Message, Random
 
 # Create your views here.
 def index(request):
-    return render(request, "index.html", {"blogs":Blog.objects.all().order_by('-date')[:4]})
+    randoms = []
+    all_randoms = list(Random.objects.all())
+    for i in range(4):
+        chosen = randint(1, 1000)%len(all_randoms)
+        r = all_randoms[chosen]
+        randoms.append(r)
+        all_randoms.remove(r)
+    return render(request, "index.html", {"blogs":Blog.objects.all().order_by('-date')[:4], "randoms":randoms})
 def about(request):
     return render(request, "about.html")
 def blog(request):

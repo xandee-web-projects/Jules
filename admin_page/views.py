@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils.dateparse import parse_date
 from portal.models import PendingPhoto, Staff, User
-from .models import Blog, Message
+from .models import Blog, Message, Random
 from datetime import date
 import string, random
 
@@ -16,6 +16,12 @@ def admin_login_required(f):
         if request.user.is_superuser:
             return f(request, *args, **kwargs)
     return wrapper
+
+def del_photo(photo):
+    try:
+        os.remove(photo.path)
+    except:
+        pass
 
 @login_required
 @admin_login_required
@@ -194,8 +200,20 @@ def discard_photo(request, id):
         photo.delete()
     return JsonResponse("ok", safe=False)
 
-def del_photo(photo):
-    try:
-        os.remove(photo.path)
-    except:
-        pass
+@login_required
+@admin_login_required
+def randoms(request):
+    if request.method == "POST":
+        for i in request.FILES.getlist('photo'):
+            Random(photo=i).save()
+    return render(request, 'admin-page/randoms.html', {'randoms':Random.objects.all().order_by("-id")})
+
+@login_required
+@admin_login_required
+def delete_random(request, id):
+    r = Random.objects.get(id=id)
+    if r:
+        del_photo(r.photo)
+        r.delete()
+    return JsonResponse("ok", safe=False)
+

@@ -18,7 +18,7 @@
                             <p class="mb-3" id="full{{msg.id}}" hidden>{{ msg.message }}</p>
                             <p class="mb-3" id="msg{{msg.id}}">{{ msg.message|truncatechars:100 }}<span id="dots{{msg.id}}">...</span></p>
                             <div>
-                                <a href="javascript:;" onclick="readMore({{msg.id}})" id="{{msg.id}}" class="font-weight-bold text-xs text-uppercase font-weight-bolder text-primary icon-move-right">
+                                <a href="javascript:;" onclick="readMore({{msg.id}})" id="btn{{msg.id}}" class="font-weight-bold text-xs text-uppercase font-weight-bolder text-primary icon-move-right">
                                     Read more
                                     <i class="fas fa-arrow-right text-xs ms-1"></i>
                                 </a>
@@ -36,7 +36,7 @@
 </div>
 <script>
     function readMore(id) {
-      var btnText = document.getElementById(id);
+      var btnText = document.getElementById("btn"+id);
       var moreText = $('#full'+id).html()
       var dots = document.getElementById("dots"+id)
 

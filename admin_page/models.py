@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 from datetime import date
 
@@ -14,3 +15,6 @@ class Message(models.Model):
     message = models.TextField()
     contact = models.CharField(max_length=150)
     time = models.DateTimeField(auto_now_add=True)
+
+class Random(models.Model):
+    photo = models.ImageField(upload_to="uploads/random/")

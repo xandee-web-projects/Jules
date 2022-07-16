@@ -21,6 +21,7 @@ urlpatterns = [
     path("delete-message/<int:id>", views.delete_message, name="delete_message"),
 
     path("randoms/", views.randoms, name="randoms"),
+    path("delete-random/<int:id>", views.delete_random, name="delete_random"),
     
 
     path("discard-photo/<int:id>", views.discard_photo, name="discard_photo"),
