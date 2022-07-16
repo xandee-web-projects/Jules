@@ -16,7 +16,7 @@ def login_page(request):
             login(request, user)
             if user.is_superuser:
                 return redirect('admin_dashboard')
-            return redirect('profile', id=user.username)
+            return redirect('home')
         else:
             messages.error(request, "Incorrect ID or password")
             return redirect('login')
@@ -29,8 +29,12 @@ def profile(request, id):
     if not user:
         user = Student.objects.filter(username=id).first()
     if not user:
-        return HttpResponse("404 not found")
+        return page_not_found_view(request, "")
     return render(request, 'profile.html', {"person": user})
+
+@login_required
+def home(request):
+    return profile(request, request.user.username)
 
 def upload_photo(request, id):
     user = User.objects.filter(username=id).first()

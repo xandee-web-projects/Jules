@@ -1,5 +1,6 @@
 {% extends "bases/base.html" %}
-{% load static%}
+{% load static %}
+{% load humanize %}
 {% block title %}
 	{{ person.first_name}} {{person.other_names}} {{person.last_name}}
 {% endblock %}

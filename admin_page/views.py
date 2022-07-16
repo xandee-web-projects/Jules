@@ -15,6 +15,8 @@ def admin_login_required(f):
     def wrapper(request, *args, **kwargs):
         if request.user.is_superuser:
             return f(request, *args, **kwargs)
+        else:
+            return redirect('portal.views.page_not_found_view')
     return wrapper
 
 def del_photo(photo):
