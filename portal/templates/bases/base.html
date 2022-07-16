@@ -39,7 +39,11 @@
     <hr class="horizontal light mt-0 mb-2">
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
-        {% block nav %}{% endblock %}
+        {% if not user.is_superuser %}
+          {% include 'bases/base-'|add:user.role|add:".html" %}
+        {% else %}
+          {% include 'bases/base-admin.html' %}
+        {% endif %}
       </ul>
     </div>
   </aside>
@@ -70,7 +74,8 @@
       </div>
     </nav>
     <div id="alerts"></div>
-
+    {% block content %}
+    {% endblock %}
   </main>
   
   <div class="fixed-plugin">

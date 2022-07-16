@@ -20,6 +20,20 @@ class PendingPhoto(models.Model):
     photo = models.ImageField(upload_to="uploads/users/")
     user = models.OneToOneField(User, editable=True, on_delete=models.CASCADE)
 
+class Staff(User):
+    class Meta:
+        verbose_name = 'Staff'
+    STAFFROLES = (
+        ('cleaner', 'Cleaner'),
+        ('teacher', 'Teacher'),
+        ('headteacher', 'Head Teacher'),
+        ('norole', 'No Role'),
+        ('security', 'Security'),
+    )
+    staff_role = models.CharField(max_length=20, choices=STAFFROLES)
+    date_employed = models.DateField()
+    salary = models.IntegerField(blank=True, null=True)
+
 class Class(models.Model):
     class Meta:
         verbose_name_plural = "Classes"
@@ -38,7 +52,7 @@ class Class(models.Model):
     class_name = models.CharField(max_length=30, choices=classes)
     new_fee = models.IntegerField()
     return_fee = models.IntegerField()
-
+    teacher = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, blank=True)
 
 class Student(User):
     class Meta:
@@ -46,19 +60,3 @@ class Student(User):
     currrent_class = models.ForeignKey(Class, on_delete=models.SET_NULL, null=True)
     date_admitted = models.DateField()
     dob = models.DateField()
-
-
-class Staff(User):
-    class Meta:
-        verbose_name = 'Staff'
-    STAFFROLES = (
-        ('cleaner', 'Cleaner'),
-        ('teacher', 'Teacher'),
-        ('headteacher', 'Head Teacher'),
-        ('norole', 'No Role'),
-        ('security', 'Security'),
-    )
-    staff_role = models.CharField(max_length=20, choices=STAFFROLES)
-    date_employed = models.DateField()
-    salary = models.IntegerField(blank=True, null=True)
-

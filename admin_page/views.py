@@ -150,7 +150,15 @@ def delete_staff(request, id):
 @login_required
 @admin_login_required
 def classes(request):
-    return render(request, 'admin-page/classes.html')
+    if request.method == "POST":
+        cid = request.POST['class']
+        tid = request.POST['teacher']
+        c = Class.objects.get(id=cid)
+        teacher = Staff.objects.get(username=tid)
+        if teacher and c:
+            c.teacher = teacher
+            c.save()
+    return render(request, 'admin-page/classes.html', {"classes":Class.objects.all(), "teachers":Staff.objects.filter(staff_role__endswith="teacher").all()})
 
 @login_required
 @admin_login_required
@@ -229,7 +237,7 @@ def edit_fees(request):
             c.new_fee = new_fee
             c.return_fee = return_fee
             c.save()
-    return render(request, "admin-page/fees.html", {"classes":Class.objects.all()})
+    return render(request, "admin-page/edit-fees.html", {"classes":Class.objects.all()})
 
 
 

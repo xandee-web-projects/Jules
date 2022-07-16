@@ -1,4 +1,4 @@
-{% extends template %}
+{% extends "bases/base.html" %}
 {% load static%}
 {% block title %}
 	{{ person.first_name}} {{person.other_names}} {{person.last_name}}
@@ -96,13 +96,15 @@
 						<li class="list-group-item border-0 ps-0 text-sm">
 							<strong class="text-dark">Email:</strong> &nbsp; {{person.email}}
 						</li>
+						{% if user.is_superuser or user.username == person.username %}
 						<li class="list-group-item border-0 ps-0 text-sm">
-							<strong class="text-dark">Salary:</strong> &nbsp; {{person.salary}}
+							<strong class="text-dark">Salary:</strong> &nbsp; {{person.salary|intcomma}}
 						</li>
 						<li class="list-group-item border-0 ps-0 text-sm">
 							<strong class="text-dark">Date employed:</strong> &nbsp;
 							{{ person.date_employed|date:"D d M Y" }}
 						</li>
+						{% endif %}
             			{% endif %}
 					</ul>
 					{% if user.username == person.username %}

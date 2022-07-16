@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from .models import Staff, Student, User, PendingPhoto
 from django.utils.dateparse import parse_date
+from django.contrib import messages
+from django.conf import settings
 
 # Create your views here.
 def login_page(request):
@@ -14,21 +16,21 @@ def login_page(request):
             login(request, user)
             if user.is_superuser:
                 return redirect('admin_dashboard')
-            return redirect('dashboard')
+            return redirect('profile', id=user.username)
         else:
-            return HttpResponse("Incorrect")
+            messages.error(request, "Incorrect ID or password")
+            return redirect('login')
     return render(request, 'login.html')
 
 
-# @login_required('login')
+@login_required
 def profile(request, id):
     user = Staff.objects.filter(username=id).first()
     if not user:
         user = Student.objects.filter(username=id).first()
     if not user:
         return HttpResponse("404 not found")
-    template = "admin-page/base.html" if request.user.is_superuser else "bases/base_"+request.user.role+".html"
-    return render(request, 'profile.html', {"person": user, "template":template })
+    return render(request, 'profile.html', {"person": user})
 
 def upload_photo(request, id):
     user = User.objects.filter(username=id).first()
@@ -39,3 +41,7 @@ def upload_photo(request, id):
 
 def page_not_found_view(request, exception):
     return render(request, '404.html', status=404)
+
+def logout(request):
+    logout(request)
+    redirect('login')
