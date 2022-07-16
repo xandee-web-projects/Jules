@@ -1,4 +1,3 @@
-from email.policy import default
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -22,13 +21,23 @@ class PendingPhoto(models.Model):
     user = models.OneToOneField(User, editable=True, on_delete=models.CASCADE)
 
 class Class(models.Model):
+    class Meta:
+        verbose_name_plural = "Classes"
     classes = (
-        ('creche', 'Creche'),
-        ('prekg', 'PreKindergarten'),
-        ('kg', 'Kindergarten'),
-        ('nur1', 'Nursery 1'),
+        ('Creche', 'Creche'),
+        ('PreKg', 'PreKg'),
+        ('Kindergarten', 'Kindergarten'),
+        ('Nursery 1', 'Nursery 1'),
+        ('Nursery 2', 'Nursery 2'),
+        ('Grade 1', 'Grade 1'),
+        ('Grade 2', 'Grade 2'),
+        ('Grade 3', 'Grade 3'),
+        ('Grade 4', 'Grade 4'),
+        ('Grade 5', 'Grade 5'),
     )
-    _class = models.CharField(max_length=30, choices=classes)
+    class_name = models.CharField(max_length=30, choices=classes)
+    new_fee = models.IntegerField()
+    return_fee = models.IntegerField()
 
 
 class Student(User):

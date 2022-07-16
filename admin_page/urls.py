@@ -15,10 +15,13 @@ urlpatterns = [
     path("update-staff/", views.update_staff, name="update_staff"),
     path("delete-staff/<str:id>", views.delete_staff, name="delete_staff"),
 
+    path("edit-fees/", views.edit_fees, name="edit_fees"),
+    
     path("classes/", views.classes, name="classes"),
-    path("pupils/", views.pupils, name="pupils"),
+    path("students/", views.students, name="students"),
     path("messages/", views.messages, name="messages"),
     path("delete-message/<int:id>", views.delete_message, name="delete_message"),
+
 
     path("randoms/", views.randoms, name="randoms"),
     path("delete-random/<int:id>", views.delete_random, name="delete_random"),

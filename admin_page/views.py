@@ -4,7 +4,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils.dateparse import parse_date
-from portal.models import PendingPhoto, Staff, User
+from portal.models import Class, PendingPhoto, Staff, User
 from .models import Blog, Message, Random
 from datetime import date
 import string, random
@@ -154,8 +154,8 @@ def classes(request):
 
 @login_required
 @admin_login_required
-def pupils(request):
-    return render(request, 'admin-page/pupils.html')
+def students(request):
+    return render(request, 'admin-page/students.html')
 
 @login_required
 @admin_login_required
@@ -216,4 +216,21 @@ def delete_random(request, id):
         del_photo(r.photo)
         r.delete()
     return JsonResponse("ok", safe=False)
+
+@login_required
+@admin_login_required
+def edit_fees(request):
+    if request.method == "POST":
+        id = request.POST['id']
+        c = Class.objects.get(id=id)
+        if c:
+            new_fee = request.POST['new_fee']
+            return_fee = request.POST['return_fee']
+            c.new_fee = new_fee
+            c.return_fee = return_fee
+            c.save()
+    return render(request, "admin-page/fees.html", {"classes":Class.objects.all()})
+
+
+
 
