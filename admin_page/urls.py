@@ -19,7 +19,7 @@ urlpatterns = [
     
     path("classes/", views.classes, name="classes"),
     path("students/", views.students, name="students"),
-    path("messages/", views.messages, name="messages"),
+    path("messages/", views.get_messages, name="messages"),
     path("delete-message/<int:id>", views.delete_message, name="delete_message"),
 
 

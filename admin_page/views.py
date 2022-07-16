@@ -1,13 +1,13 @@
 import os
-from django.http import HttpResponse, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils.dateparse import parse_date
 from portal.models import Class, PendingPhoto, Staff, User
 from .models import Blog, Message, Random
 from datetime import date
 import string, random
+from django.contrib import messages
 
 # Create your views here.
 
@@ -16,7 +16,7 @@ def admin_login_required(f):
         if request.user.is_superuser:
             return f(request, *args, **kwargs)
         else:
-            return redirect('portal.views.page_not_found_view')
+            raise Http404
     return wrapper
 
 def del_photo(photo):
@@ -52,6 +52,7 @@ def new_blog(request):
         if date:
             blog.date = date
         blog.save()
+        messages.success(request, "Blog created")
     return redirect('edit_blogs')
 
 @login_required
@@ -61,6 +62,7 @@ def update_blog(request):
         id = request.POST['id']
         blog = Blog.objects.get(id=id)
         if blog:
+            messages.success(request, f"Blog {blog.heading} updated")
             heading = request.POST['heading']
             desc = request.POST['desc']
             date = request.POST['date']
@@ -75,6 +77,8 @@ def update_blog(request):
                 del_photo(blog.photo)
                 blog.photo = photo
             blog.save()
+        else:
+            messages.error(request, "Blog was not found. Try refreshing the page")
     return redirect('edit_blogs')
 
 @login_required
@@ -82,8 +86,11 @@ def update_blog(request):
 def delete_blog(request, id):
     blog = Blog.objects.get(id=id)
     if blog:
+        messages.success(request, f"Blog {blog.heading} deleted")
         del_photo(blog.photo)
         blog.delete()
+    else:
+        messages.error(request, "Blog was not found. Try refreshing the page")
     return redirect('edit_blogs')
 
 @login_required
@@ -115,6 +122,7 @@ def new_staff(request, methdods=['POST']):
         staff = Staff.objects.create_user(username=f'{yr}{str(num+1).zfill(3)}', password=rand_pwd if pwd == "" else pwd, email=email, gender=gender,
             first_name=fname, last_name=lname, other_names=onames, role='staff', staff_role=role.lower(), phone=phone, salary=salary, date_employed=parse_date(date_employed))
         staff.save()
+        messages.success(request, f"Staff created")
     return redirect('staff')
 
 @login_required
@@ -138,6 +146,9 @@ def update_staff(request):
             if password != "":
                 staff.set_password(password)
             staff.save()
+            messages.success(request, f"Staff {staff.username} Updated")
+        else:
+            messages.error(request, "Staff was not found. Try refreshing the page")
     return redirect('staff')
 
 @login_required
@@ -160,6 +171,9 @@ def classes(request):
         if teacher and c:
             c.teacher = teacher
             c.save()
+            messages.success(request, f"{teacher.first_name} is now the teacher of {c.class_name}")
+        else:
+            messages.error(request, f"The staff or the class were nor found")
     return render(request, 'admin-page/classes.html', {"classes":Class.objects.all(), "teachers":Staff.objects.filter(staff_role__endswith="teacher").all()})
 
 @login_required
@@ -169,7 +183,7 @@ def students(request):
 
 @login_required
 @admin_login_required
-def messages(request):
+def get_messages(request):
     return render(request, 'admin-page/messages.html', {'messages':Message.objects.all().order_by('-time')})
 
 @login_required
@@ -239,6 +253,9 @@ def edit_fees(request):
             c.new_fee = new_fee
             c.return_fee = return_fee
             c.save()
+            messages.success(request, f"{c.class_name}'s school fees has been updated")
+        else:
+            messages.error(request, f"The class you are trying to edit was not found")
     return render(request, "admin-page/edit-fees.html", {"classes":Class.objects.all()})
 
 

@@ -1,12 +1,11 @@
 from datetime import date
-from django.http import HttpResponse, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from .models import Staff, Student, User, PendingPhoto
 from django.utils.dateparse import parse_date
 from django.contrib import messages
-from django.conf import settings
 
 # Create your views here.
 def login_page(request):
@@ -29,7 +28,7 @@ def profile(request, id):
     if not user:
         user = Student.objects.filter(username=id).first()
     if not user:
-        return page_not_found_view(request, "")
+        raise Http404
     return render(request, 'profile.html', {"person": user})
 
 @login_required
