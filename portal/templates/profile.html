@@ -35,7 +35,7 @@
 						{% if person.role == "staff" %}
 							{{person.staff_role|title}}
 						{% else %}
-							{{person.currrent_class}}
+							{{person.current_class.class_name }}
 						{% endif %}
 					</p>
 				</div>
@@ -72,7 +72,7 @@
 						{% if person.role != "staff" %}
 						<li class="list-group-item border-0 ps-0 text-sm">
 							<strong class="text-dark">Class:</strong> &nbsp;
-							{{person.currrent_class}}
+							{{person.current_class.class_name}}
 						</li>
 						<li class="list-group-item border-0 ps-0 text-sm">
 							<strong class="text-dark">Parent phone:</strong> &nbsp;
@@ -110,6 +110,11 @@
 					</ul>
 					{% if user.username == person.username %}
 						<hr>
+						{% if user.pendingphoto.photo %}
+						<p>
+							You have an upload request that is currently being processed
+						</p>
+						{% endif %}
 						<button data-toggle="modal" data-target="#uploadPhotoModal" class="btn btn-primary">Upload / Change photo</button>
 					{% endif %}
 						

@@ -50,13 +50,13 @@ class Class(models.Model):
         ('Grade 5', 'Grade 5'),
     )
     class_name = models.CharField(max_length=30, choices=classes)
-    new_fee = models.IntegerField()
-    return_fee = models.IntegerField()
+    new_fee = models.IntegerField(default=0)
+    return_fee = models.IntegerField(default=0)
     teacher = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, blank=True)
 
 class Student(User):
     class Meta:
         verbose_name = 'Student'
-    currrent_class = models.ForeignKey(Class, on_delete=models.SET_NULL, null=True)
+    current_class = models.ForeignKey(Class, on_delete=models.SET_NULL, null=True)
     date_admitted = models.DateField()
     dob = models.DateField()

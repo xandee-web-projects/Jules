@@ -1,9 +1,10 @@
 import os
+import re
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.utils.dateparse import parse_date
-from portal.models import Class, PendingPhoto, Staff, User
+from portal.models import Class, PendingPhoto, Staff, Student, User
 from .models import Blog, Message, Random
 from datetime import date
 import string, random
@@ -21,7 +22,8 @@ def admin_login_required(f):
 
 def del_photo(photo):
     try:
-        os.remove(photo.path)
+        if not photo.path.endswith("\default.png"):
+            os.remove(photo.path)
     except:
         pass
 
@@ -119,7 +121,7 @@ def new_staff(request, methdods=['POST']):
         else:
             num = 1
         rand_pwd = ''.join(random.choices(string.ascii_lowercase+string.digits, k=8))
-        staff = Staff.objects.create_user(username=f'{yr}{str(num+1).zfill(3)}', password=rand_pwd if pwd == "" else pwd, email=email, gender=gender,
+        staff = Staff.objects.create_user(username=f'1{yr}{str(num+1).zfill(3)}', password=rand_pwd if pwd == "" else pwd, email=email, gender=gender,
             first_name=fname, last_name=lname, other_names=onames, role='staff', staff_role=role.lower(), phone=phone, salary=salary, date_employed=parse_date(date_employed))
         staff.save()
         messages.success(request, f"Staff created")
@@ -167,8 +169,12 @@ def classes(request):
         cid = request.POST['class']
         tid = request.POST['teacher']
         c = Class.objects.get(id=cid)
-        teacher = Staff.objects.get(username=tid)
-        if teacher and c:
+        teacher = Staff.objects.filter(username=tid).first()
+        if tid == "None" and c:
+            c.teacher = None
+            c.save()
+            messages.success(request, f"{c.class_name} has been set to no teacher")
+        elif teacher and c:
             c.teacher = teacher
             c.save()
             messages.success(request, f"{teacher.first_name} is now the teacher of {c.class_name}")
@@ -179,7 +185,68 @@ def classes(request):
 @login_required
 @admin_login_required
 def students(request):
-    return render(request, 'admin-page/students.html')
+    return render(request, 'admin-page/students.html', {'students':Student.objects.all().order_by('first_name'), 'classes':Class.objects.all()})
+
+@login_required
+@admin_login_required
+def new_student(request):
+    if request.method == "POST":
+        fname = request.POST['fname']
+        lname = request.POST['lname']
+        onames = request.POST['onames']
+        email = request.POST['email']
+        gender = request.POST['gender']
+        phone = request.POST['phone']
+        pwd = request.POST['password']
+        date_admitted = request.POST['date_admitted']
+        dob = request.POST['dob']
+        last = Student.objects.last()
+        yr = str(date.today().year)[2:]
+        _class = Class.objects.filter(id=request.POST['class']).first()
+        if last:
+            num = int(last.username[-3:])
+        else:
+            num = 1
+        rand_pwd = ''.join(random.choices(string.ascii_lowercase+string.digits, k=8)) 
+        student = Student.objects.create_user(username=f'{yr}{str(num+1).zfill(3)}', password=rand_pwd if pwd == "" else pwd, email=email, gender=gender,
+            first_name=fname, last_name=lname, other_names=onames, role='student', current_class=_class, phone=phone, dob=parse_date(dob), date_admitted=parse_date(date_admitted))
+        student.save()
+        messages.success(request, f"Student created")
+    return redirect('students')
+
+@login_required
+@admin_login_required
+def update_student(request):
+    if request.method == "POST":
+        uid = request.POST.get('id')
+        student = Student.objects.get(username=str(uid))
+        if student:
+            student.first_name = request.POST.get('fname')
+            student.last_name = request.POST.get('lname')
+            student.other_names = request.POST.get('onames')
+            student.email = request.POST.get('email')
+            student.phone = request.POST.get('phone')
+            
+            _class = Class.objects.filter(id=request.POST.get('class')).first()
+            password = request.POST.get('password')
+            if _class != None:
+                student.current_class = _class
+            if password != "":
+                student.set_password(password)
+            student.save()
+            messages.success(request, f"Student {student.username} Updated")
+        else:
+            messages.error(request, "Student was not found. Try refreshing the page")
+    return redirect('students')
+
+@login_required
+@admin_login_required
+def delete_student(request, id):
+    student = Student.objects.get(username=id)
+    if student:
+        del_photo(student.photo)
+        student.delete()
+    return HttpResponse()
 
 @login_required
 @admin_login_required

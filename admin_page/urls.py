@@ -17,8 +17,12 @@ urlpatterns = [
 
     path("edit-fees/", views.edit_fees, name="edit_fees"),
     
-    path("classes/", views.classes, name="classes"),
     path("students/", views.students, name="students"),
+    path("new-student/", views.new_student, name="new_student"),
+    path("update-student/", views.update_student, name="update_student"),
+    path("delete-student/", views.delete_student, name="delete_student"),
+
+    path("classes/", views.classes, name="classes"),
     path("messages/", views.get_messages, name="messages"),
     path("delete-message/<int:id>", views.delete_message, name="delete_message"),
 

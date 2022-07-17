@@ -39,7 +39,7 @@
 							<tbody>
 								{% for class in classes %}
 								<tr>
-									<td class="align-middle text-center text-sm">
+									<td class="text-center align-middle text-sm">
 										<span>{{class.class_name|title}}</span>
 									</td>
 									<td class="align-middle text-center text-sm">
@@ -95,7 +95,7 @@
 						<div class="input-group input-group-outline mb-3">
 							<input type="hidden" name="class" id="class">
 							<select name="teacher" id="teacher" class="form-control" aria-placeholder="Class teacher" required>
-								<option disabled selected value>-- Leave blank to remain unchanged --</option>
+								<option selected value="None">-- Leave blank to remove the current teacher --</option>
 								{% for teacher in teachers %}
 									{% if teacher.class_set.all|length < 1 %}
 										<option value="{{teacher.username}}">{{teacher.first_name}} {{teacher.last_name}}</option>
