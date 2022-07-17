@@ -1,5 +1,4 @@
 import os
-import re
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
@@ -9,6 +8,7 @@ from .models import Blog, Message, Random
 from datetime import date
 import string, random
 from django.contrib import messages
+
 
 # Create your views here.
 
@@ -185,7 +185,19 @@ def classes(request):
 @login_required
 @admin_login_required
 def students(request):
-    return render(request, 'admin-page/students.html', {'students':Student.objects.all().order_by('first_name'), 'classes':Class.objects.all()})
+    c = None
+    try:
+        class_id = request.GET['class']
+    except:
+        class_id = None
+    if class_id:
+        get_class = Class.objects.get(id=class_id)
+        if get_class:
+            s = Student.objects.filter(current_class=get_class).order_by('first_name')
+            c = get_class.class_name
+    else:
+        s = Student.objects.all().order_by('first_name')
+    return render(request, 'admin-page/students.html', {'students': s, 'classes':Class.objects.all(), "c":c})
 
 @login_required
 @admin_login_required

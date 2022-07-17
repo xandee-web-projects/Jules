@@ -10,9 +10,6 @@
             </div>
         </div>
         <div class="row mt-lg-5 mt-4 removable">
-            {% if pending_photos|length == 0 %}
-                {% include 'empty.html' %}
-            {% endif %}
 			{% for photo in pending_photos %}
             <div id="{{photo.id}}" class="col-lg-4 col-md-6 mb-5">
                 <div class="card mb-4" data-animation="true">
@@ -45,6 +42,8 @@
                     </div>
                 </div>
             </div>
+            {% empty %}
+                {% include 'empty.html' %}
 			{% endfor %}
         </div>
     </div>

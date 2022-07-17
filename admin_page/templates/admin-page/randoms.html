@@ -28,9 +28,6 @@
 			</div>
 			<section class="py-5">
 				<div class="row mt-lg-5 mt-4 removable">
-					{% if randoms|length == 0 %}
-						{% include 'empty.html' %}
-					{% endif %}
 					{% for r in randoms %}
 					<div class="col-lg-4 col-md-6 mb-5" id="{{r.id}}">
 						<div class="card mb-4">
@@ -44,6 +41,8 @@
 							</button>
 						</div>
 					</div>
+					{% empty %}
+						{% include 'empty.html' %}
 					{% endfor %}
 				</div>
 			</section>

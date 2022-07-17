@@ -40,7 +40,9 @@
 								{% for class in classes %}
 								<tr>
 									<td class="text-center align-middle text-sm">
-										<span>{{class.class_name|title}}</span>
+										<a href="{% url 'students' %}?class={{class.id}}">
+											<span>{{class.class_name|title}}</span>
+										</a>
 									</td>
 									<td class="align-middle text-center text-sm">
 										{% if class.teacher %}

@@ -36,9 +36,6 @@
 					</div>
 				</div>
 				<div class="row mt-lg-5 mt-4 removable">
-					{% if blogs|length == 0 %}
-						{% include 'empty.html' %}
-					{% endif %}
 					{% for blog in blogs %}
 					<div class="col-lg-4 col-md-6 mb-5">
 						<div class="card mb-4" data-animation="true">
@@ -70,6 +67,8 @@
 							</div>
 						</div>
 					</div>
+					{% empty %}
+						{% include 'empty.html' %}
 					{% endfor %}
 				</div>
 			</section>
