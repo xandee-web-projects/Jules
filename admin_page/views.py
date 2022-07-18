@@ -4,7 +4,7 @@ from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.utils.dateparse import parse_date
-from portal.models import Class, PendingPhoto, Staff, Student, User
+from portal.models import Class, ClassFees, PendingPhoto, Staff, Student, User
 from .models import Blog, Message, Random
 from datetime import date
 import string, random
@@ -219,7 +219,7 @@ def new_student(request):
         if last:
             num = int(last.username[-3:])
         else:
-            num = 1
+            num = 0
         rand_pwd = ''.join(random.choices(string.ascii_lowercase+string.digits, k=8)) 
         student = Student.objects.create_user(username=f'{yr}{str(num+1).zfill(3)}', password=rand_pwd if pwd == "" else pwd, email=email, gender=gender,
             first_name=fname, last_name=lname, other_names=onames, role='student', current_class=_class, phone=phone, dob=parse_date(dob), date_admitted=parse_date(date_admitted))
@@ -326,7 +326,7 @@ def delete_random(request, id):
 def edit_fees(request):
     if request.method == "POST":
         id = request.POST['id']
-        c = Class.objects.get(id=id)
+        c = ClassFees.objects.get(id=id)
         if c:
             new_fee = request.POST['new_fee']
             return_fee = request.POST['return_fee']
@@ -336,8 +336,15 @@ def edit_fees(request):
             messages.success(request, f"{c.name}'s school fees has been updated")
         else:
             messages.error(request, f"The class you are trying to edit was not found")
-    return render(request, "admin-page/edit-fees.html", {"classes":Class.objects.all()})
+    return render(request, "admin-page/edit-fees.html", {"classes":ClassFees.objects.all()})
 
+@login_required
+@admin_login_required
+def delete_class(request, id):
+    c = Class.objects.get(id=id)
+    if c:
+        c.delete()
+    return HttpResponse()
 
 @login_required
 @admin_login_required
@@ -346,10 +353,12 @@ def new_subclass(request):
         _class = request.POST['parent_class']
         try:
             c = Class.objects.get(id=_class)
-            name1 = request.POST['subclass_name1']
-            name2 = request.POST['subclass_name2']
+            name1 = request.POST['subclass1']
+            name2 = request.POST['subclass2']
             Class(name=c.name, subclass=name1).save()
             Class(name=c.name, subclass=name2).save()
-        except:
+        except Exception as e:
+            print(e)
             messages.error(request, "Could not carry out this operation")
     return redirect('classes')
+

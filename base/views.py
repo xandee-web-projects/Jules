@@ -12,11 +12,11 @@ def index(request):
         r = all_randoms[chosen]
         randoms.append(r)
         all_randoms.remove(r)
-    return render(request, "index.html", {"blogs":Blog.objects.all().order_by('-date')[:4], "randoms":randoms})
+    return render(request, "index.html", {"blogs":Blog.objects.all().order_by('-date')[:3], "randoms":randoms})
 def about(request):
     return render(request, "about.html")
 def blog(request):
-    return render(request, "blog.html", {"blogs":Blog.objects.all().order_by('-date')[:3]})
+    return render(request, "blog.html", {"blogs":Blog.objects.all().order_by('-date')})
 def contact(request):
     if request.method == "POST":
         name = request.POST['name']

@@ -24,6 +24,9 @@ urlpatterns = [
 
     path("classes/", views.classes, name="classes"),
     path("new-subclass/", views.new_subclass, name="new_subclass"),
+    path("delete-class/<int:id>", views.delete_class, name="delete_class"),
+    # path("delete-migrate/", views.delete_and_migrate_class, name="delete_and_migrate_class"),
+
     path("messages/", views.get_messages, name="messages"),
     path("delete-message/<int:id>", views.delete_message, name="delete_message"),
 

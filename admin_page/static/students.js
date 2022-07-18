@@ -9,10 +9,9 @@ function edit_student(username, first_name, last_name, other_names, email, phone
 
 function delete_student() {
 	let id = $("#id").val();
+	let name = $("#fname").val();
 	var a = confirm(
-		"Are you sure you want to delete STUDENT: " +
-			id +
-			"\nNote: The student will not beable to login to the portal again."
+		"Are you sure you want to delete "+name.toUpperCase()+"\nNote: The student will not beable to login to the portal again."
 	);
 	if (!a) return;
 	$("#delete_student_btn").prop("disabled", true);

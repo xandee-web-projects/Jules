@@ -70,7 +70,7 @@
 	<body>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark ftco_navbar ftco-navbar-light" id="ftco-navbar">
 			<div class="container d-flex align-items-center">
-				<a class="navbar-brand" href="#home' %}">Jules Foundation School</a>
+				<a class="navbar-brand" href="{% url 'index' %}">Jules Foundation School</a>
 				<button
 					class="navbar-toggler"
 					type="button"
@@ -118,7 +118,7 @@
 						<h1 class="mb-2 bread"></h1>
 						<p class="breadcrumbs">
 							<span class="mr-2"
-								><a href="#home' %}"
+								><a href="{% url 'index' %}"
 									>Home <i class="ion-ios-arrow-forward"></i
 								></a>
 								</span
@@ -166,31 +166,31 @@
 							<h2 class="ftco-heading-2">Links</h2>
 							<ul class="list-unstyled">
 								<li>
-									<a href=""
+									<a href="{% url 'index' %}"
 										><span class="ion-ios-arrow-round-forward mr-2"></span
 										>Home</a
 									>
 								</li>
 								<li>
-									<a href="#about"
+									<a href="{% url 'about' %}"
 										><span class="ion-ios-arrow-round-forward mr-2"></span
 										>About</a
 									>
 								</li>
 								<li>
-									<a href="#fees"
+									<a href="{% url 'fees' %}"
 										><span class="ion-ios-arrow-round-forward mr-2"></span
 										>Fees</a
 									>
 								</li>
 								<li>
-									<a href="#blog"
+									<a href="{% url 'blog' %}"
 										><span class="ion-ios-arrow-round-forward mr-2"></span
 										>Blog</a
 									>
 								</li>
 								<li>
-									<a href="#contact	"
+									<a href="{% url 'contact' %}"
 										><span class="ion-ios-arrow-round-forward mr-2"></span
 										>Contact</a
 									>

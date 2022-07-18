@@ -1,5 +1,5 @@
 <li class="nav-item">
-    <a class="nav-link text-white active bg-gradient-primary"
+    <a class="nav-link text-white {% if request.path|slice:'1:'|slice:'-1' == 'dashboard' %}active bg-gradient-primary{% endif %}"
       href="{% url 'admin_dashboard' %}">
       <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
         <i class="material-icons opacity-10">dashboard</i>
@@ -8,7 +8,7 @@
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link text-white" href="{% url 'staff' %}">
+    <a class="nav-link {% if request.path|slice:'1:'|slice:'-1' == 'staff'  %}active bg-gradient-primary{% endif %} text-white" href="{% url 'staff' %}">
       <div
         class="text-white text-center me-2 d-flex align-items-center justify-content-center"
   >
@@ -18,7 +18,7 @@
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link text-white" href="{% url 'classes' %}">
+    <a class="nav-link text-white {% if request.path|slice:'1:'|slice:'-1' == 'classes'  %}active bg-gradient-primary{% endif %}" href="{% url 'classes' %}">
       <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
         <i class="material-icons opacity-10">local_library</i>
       </div>
@@ -26,7 +26,7 @@
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link text-white" href="{% url 'students' %}">
+    <a class="nav-link {% if request.path|slice:'1:'|slice:'-1' == 'students'  %}active bg-gradient-primary{% endif %} text-white" href="{% url 'students' %}">
       <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
         <i class="material-icons opacity-10">school</i>
       </div>
@@ -34,7 +34,7 @@
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link text-white" href="{% url 'website' %}">
+    <a class="nav-link text-white {% if request.path|slice:'1:'|slice:'-1' in 'website edit-blogs edit-fees messages randoms'  %}active bg-gradient-primary{% endif %}" href="{% url 'website' %}">
       <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
         <i class="material-icons opacity-10">web</i>
       </div>
@@ -42,7 +42,7 @@
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link text-white" href="{% url 'pending_photos' %}">
+    <a class="nav-link {% if request.path|slice:'1:'|slice:'-1' == 'pending-photos'  %}active bg-gradient-primary{% endif %} text-white" href="{% url 'pending_photos' %}">
       <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
         <i class="material-icons opacity-10">photo</i>
       </div>

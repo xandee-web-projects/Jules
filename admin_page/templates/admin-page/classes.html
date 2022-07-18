@@ -16,6 +16,15 @@
 							<div class="col-6 d-flex align-items-center">
 								<h6 class="text-white text-capitalize ps-3">Class Table</h6>
 							</div>
+							<div class="col-6 text-end" style="right: 10px; position: relative">
+								<button
+									type="button"
+									class="btn bg-gradient-dark mb-0"
+									data-toggle="modal"
+									data-target="#newSubClassModal">
+									<i class="material-icons opacity-10">add</i> New subclass
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -104,17 +113,21 @@
 						{% csrf_token %}
 						<div class="input-group input-group-outline mb-3">
 							<label class="form-label">Name of subclass 1</label>
-							<input type="text" class="form-control" name="subclass_name1" required/>
+							<input type="text" class="form-control" name="subclass1" required/>
 						</div>
 						<div class="input-group input-group-outline mb-3">
 							<label class="form-label">Name of subclass 2</label>
-							<input type="text" class="form-control" name="subclass_name2" required/>
+							<input type="text" class="form-control" name="subclass2" required/>
 						</div>
 						<div class="input-group input-group-outline mb-3">
 							<select name="parent_class" class="form-control" aria-placeholder="Class" required>
 								<option selected disabled>-- Select parent class --</option>
 								{% for class in classes %}
-								<option value="{{class.id}}">{{class.name}}</option>
+								{% if not class.subclass %}
+								<option value="{{class.id}}">
+									{{class.name}}
+								</option>
+								{% endif %}
 								{% endfor %}
 							</select>
 						</div>
@@ -171,6 +184,9 @@
 			</div>
 			<!-- Modal footer -->
 			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" onclick="delete_class()">
+					Delete
+				</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">
 					Close
 				</button>
@@ -179,8 +195,22 @@
 	</div>
 </div>
 <script>
-	function edit_subclass(id){
+	function edit_class(id){
 		$("#class").val(id)
+	}
+	function delete_class(){
+		let id = $('#class').val()
+		var a = confirm(
+			"Are you sure you want to delete this class?\nNote: You have to assign all the students in this class to another class."
+		);
+		if (!a) return;
+		fetch('/delete-class/'+id)
+		.then((res) => {
+			location.reload()
+		});
+	}
+	function delete_and_migrate_class(){
+
 	}
 </script>
 {% endblock %}
