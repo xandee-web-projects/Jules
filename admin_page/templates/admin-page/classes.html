@@ -41,7 +41,12 @@
 								<tr>
 									<td class="text-center align-middle text-sm">
 										<a href="{% url 'students' %}?class={{class.id}}">
-											<span>{{class.class_name|title}}</span>
+											<span>
+												{{class.name|title}}
+												{% if class.subclass %}
+												{{class.subclass|title}}
+												{% endif %}
+											</span>
 										</a>
 									</td>
 									<td class="align-middle text-center text-sm">
@@ -61,7 +66,7 @@
 										{% endif %}
 									</td>
 									<td class="align-middle text-center text-sm">
-										<span>{{class.student_set.all|length}}</span>
+										<span>{{class.student_set.count}}</span>
 									</td>
 									<td class="align-middle">
 										<a onclick="edit_class({{ class.id }})"
@@ -81,12 +86,62 @@
 		</div>
 	</div>
 </div>
+<div class="modal fade" id="newSubClassModal">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<!-- Modal Header -->
+			<div class="modal-header">
+				<h4 class="modal-title">New subclass</h4>
+			</div>
+
+			<!-- Modal body -->
+			<div class="modal-body">
+				<div class="card-body">
+					<form role="form"
+						class="text-start"
+						method="post"
+						action="{% url 'new_subclass' %}">
+						{% csrf_token %}
+						<div class="input-group input-group-outline mb-3">
+							<label class="form-label">Name of subclass 1</label>
+							<input type="text" class="form-control" name="subclass_name1" required/>
+						</div>
+						<div class="input-group input-group-outline mb-3">
+							<label class="form-label">Name of subclass 2</label>
+							<input type="text" class="form-control" name="subclass_name2" required/>
+						</div>
+						<div class="input-group input-group-outline mb-3">
+							<select name="parent_class" class="form-control" aria-placeholder="Class" required>
+								<option selected disabled>-- Select parent class --</option>
+								{% for class in classes %}
+								<option value="{{class.id}}">{{class.name}}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div class="text-center">
+							<button type="submit" id="create_staff_btn" class="btn bg-gradient-primary w-100 my-4 mb-2">
+								Create
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<!-- Modal footer -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">
+					Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="modal fade" id="editClassModal">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<!-- Modal Header -->
 			<div class="modal-header">
-				<h4 class="modal-title">Edit staff</h4>
+				<h4 class="modal-title">Edit class teacher</h4>
 			</div>
 
 			<!-- Modal body -->
@@ -99,12 +154,13 @@
 							<select name="teacher" id="teacher" class="form-control" aria-placeholder="Class teacher" required>
 								<option selected value="None">-- Leave blank to remove the current teacher --</option>
 								{% for teacher in teachers %}
-									{% if teacher.class_set.all|length < 1 %}
+									{% if teacher.class_set.count < 1 %}
 										<option value="{{teacher.username}}">{{teacher.first_name}} {{teacher.last_name}}</option>
 									{% endif %}
 								{% endfor %}
 							</select>
 						</div>
+						<p class="text-center" style="margin-bottom: 0px!important;">Assign a teacher to this class</p>
 						<div class="text-center">
 							<button type="submit" class="btn bg-gradient-primary w-100 my-4 mb-2">
 								Update
@@ -123,7 +179,7 @@
 	</div>
 </div>
 <script>
-	function edit_class(id){
+	function edit_subclass(id){
 		$("#class").val(id)
 	}
 </script>

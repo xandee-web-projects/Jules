@@ -23,6 +23,7 @@ urlpatterns = [
     path("delete-student/", views.delete_student, name="delete_student"),
 
     path("classes/", views.classes, name="classes"),
+    path("new-subclass/", views.new_subclass, name="new_subclass"),
     path("messages/", views.get_messages, name="messages"),
     path("delete-message/<int:id>", views.delete_message, name="delete_message"),
 

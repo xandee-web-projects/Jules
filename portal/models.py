@@ -34,6 +34,25 @@ class Staff(User):
     date_employed = models.DateField()
     salary = models.IntegerField(blank=True, null=True)
 
+class ClassFees(models.Model):
+    class Meta:
+        verbose_name_plural = "Classes fees"
+    classes = (
+        ('Creche', 'Creche'),
+        ('PreKg', 'PreKg'),
+        ('Kindergarten', 'Kindergarten'),
+        ('Nursery 1', 'Nursery 1'),
+        ('Nursery 2', 'Nursery 2'),
+        ('Grade 1', 'Grade 1'),
+        ('Grade 2', 'Grade 2'),
+        ('Grade 3', 'Grade 3'),
+        ('Grade 4', 'Grade 4'),
+        ('Grade 5', 'Grade 5'),
+    )
+    name = models.CharField(max_length=30, choices=classes)
+    new_fee = models.IntegerField(default=0)
+    return_fee = models.IntegerField(default=0)
+
 class Class(models.Model):
     class Meta:
         verbose_name_plural = "Classes"
@@ -49,9 +68,8 @@ class Class(models.Model):
         ('Grade 4', 'Grade 4'),
         ('Grade 5', 'Grade 5'),
     )
-    class_name = models.CharField(max_length=30, choices=classes)
-    new_fee = models.IntegerField(default=0)
-    return_fee = models.IntegerField(default=0)
+    name = models.CharField(max_length=30, choices=classes)
+    subclass = models.CharField(max_length=30, null=True, blank=True)
     teacher = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, blank=True)
 
 class Student(User):

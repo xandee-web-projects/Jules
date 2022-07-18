@@ -41,7 +41,7 @@
 								{% for class in classes %}
 								<tr>
 									<td class="align-middle text-center text-sm">
-										<span class="">{{class.class_name|title}}</span>
+										<span class="">{{class.name|title}}</span>
 									</td>
 									<td class="align-middle text-center text-sm">
 										<span>&#8358;{{class.new_fee|intcomma }}</span>
@@ -50,7 +50,7 @@
 										<span>&#8358;{{class.return_fee|intcomma }}</span>
 									</td>
 									<td class="align-middle">
-										<a onclick="edit_fee({{ class.id }}, '{{class.class_name|title}}', {{ class.new_fee }}, {{ class.return_fee }})"
+										<a onclick="edit_fee({{ class.id }}, '{{class.name|title}}', {{ class.new_fee }}, {{ class.return_fee }})"
 										type="button"
 										class="text-secondary font-weight-bold text-xs"
 										data-toggle="modal"

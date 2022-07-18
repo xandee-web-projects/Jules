@@ -3,3 +3,4 @@ allow user to change password
 make broadcast button work
 allow to add sub classes (arms)
 Change all breadcrumbs
+nav bars should show active

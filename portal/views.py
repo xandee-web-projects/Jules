@@ -1,9 +1,8 @@
-from datetime import date
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from .models import Staff, Student, User, PendingPhoto
+from .models import Class, ClassFees, Staff, Student, User, PendingPhoto
 from django.utils.dateparse import parse_date
 from django.contrib import messages
 

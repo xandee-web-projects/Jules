@@ -1,4 +1,5 @@
 import os
+import re
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
@@ -40,7 +41,7 @@ def website(request):
 @login_required
 @admin_login_required
 def editblogs(request):
-    return render(request, 'admin-page/edit-blogs.html', {"blogs": Blog.objects.all()})
+    return render(request, 'admin-page/edit-blogs.html', {"blogs": Blog.objects.all().order_by("-date")})
 
 @login_required
 @admin_login_required
@@ -173,14 +174,14 @@ def classes(request):
         if tid == "None" and c:
             c.teacher = None
             c.save()
-            messages.success(request, f"{c.class_name} has been set to no teacher")
+            messages.success(request, f"{c.name} has been set to no teacher")
         elif teacher and c:
             c.teacher = teacher
             c.save()
-            messages.success(request, f"{teacher.first_name} is now the teacher of {c.class_name}")
+            messages.success(request, f"{teacher.first_name} is now the teacher of {c.name}")
         else:
             messages.error(request, f"The staff or the class were nor found")
-    return render(request, 'admin-page/classes.html', {"classes":Class.objects.all(), "teachers":Staff.objects.filter(staff_role__endswith="teacher").all()})
+    return render(request, 'admin-page/classes.html', {"classes":Class.objects.all(), "teachers":Staff.objects.filter(staff_role__endswith="teacher").order_by("first_name")})
 
 @login_required
 @admin_login_required
@@ -194,7 +195,7 @@ def students(request):
         get_class = Class.objects.get(id=class_id)
         if get_class:
             s = Student.objects.filter(current_class=get_class).order_by('first_name')
-            c = get_class.class_name
+            c = get_class.name
     else:
         s = Student.objects.all().order_by('first_name')
     return render(request, 'admin-page/students.html', {'students': s, 'classes':Class.objects.all(), "c":c})
@@ -332,11 +333,23 @@ def edit_fees(request):
             c.new_fee = new_fee
             c.return_fee = return_fee
             c.save()
-            messages.success(request, f"{c.class_name}'s school fees has been updated")
+            messages.success(request, f"{c.name}'s school fees has been updated")
         else:
             messages.error(request, f"The class you are trying to edit was not found")
     return render(request, "admin-page/edit-fees.html", {"classes":Class.objects.all()})
 
 
-
-
+@login_required
+@admin_login_required
+def new_subclass(request):
+    if request.method == "POST":
+        _class = request.POST['parent_class']
+        try:
+            c = Class.objects.get(id=_class)
+            name1 = request.POST['subclass_name1']
+            name2 = request.POST['subclass_name2']
+            Class(name=c.name, subclass=name1).save()
+            Class(name=c.name, subclass=name2).save()
+        except:
+            messages.error(request, "Could not carry out this operation")
+    return redirect('classes')
