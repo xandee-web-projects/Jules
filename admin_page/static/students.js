@@ -14,16 +14,8 @@ function delete_student() {
 		"Are you sure you want to delete "+name.toUpperCase()+"\nNote: The student will not beable to login to the portal again."
 	);
 	if (!a) return;
-	$("#delete_student_btn").prop("disabled", true);
 	fetch("/delete-student/"+id)
 	.then((res) => {
 		location.reload()
 	});
 }
-
-$("#update_student").submit((e) => {
-	$("#update_student_btn").prop("disabled", true);
-});
-$("#create_student").submit((e) => {
-	$("#create_student_btn").prop("disabled", true);
-});

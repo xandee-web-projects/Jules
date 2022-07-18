@@ -1,9 +1,8 @@
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import Class, ClassFees, Staff, Student, User, PendingPhoto
-from django.utils.dateparse import parse_date
+from .models import Staff, Student, User, PendingPhoto
 from django.contrib import messages
 
 # Create your views here.
@@ -44,6 +43,6 @@ def upload_photo(request, id):
 def page_not_found_view(request, exception):
     return render(request, '404.html', status=404)
 
-def logout(request):
+def logout_user(request):
     logout(request)
-    redirect('login')
+    return redirect('login')

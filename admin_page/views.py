@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.utils.dateparse import parse_date
 from portal.models import Class, ClassFees, PendingPhoto, Staff, Student, User
-from .models import Blog, Message, Random
+from .models import Blog, ContactList, Message, Random
 from datetime import date
 import string, random
 from django.contrib import messages
@@ -362,3 +362,35 @@ def new_subclass(request):
             messages.error(request, "Could not carry out this operation")
     return redirect('classes')
 
+@login_required
+@admin_login_required
+def contact_list(request):
+    if request.method == "POST":
+        fname = request.POST['fname']
+        lname = request.POST['lname']
+        email = request.POST['email']
+        gender = request.POST['gender']
+        phone = request.POST['phone']
+        whatsapp = request.POST['phone']
+        ContactList(first_name=fname, last_name=lname, email=email, gender=gender, phone=phone, whatsapp=whatsapp).save()
+    return render(request, "admin-page/contact-list.html", {"contact_list": ContactList.objects.all().order_by('first_name')})
+
+@login_required
+@admin_login_required
+def update_contact(request):
+    if request.method == "POST":
+        id = request.POST['id']
+        fname = request.POST['fname']
+        lname = request.POST['lname']
+        email = request.POST['email']
+        phone = request.POST['phone']
+        ContactList.objects.filter(id=id).update(first_name=fname, last_name=lname, email=email, phone=phone)
+    return redirect('contact_list')
+
+@login_required
+@admin_login_required
+def delete_contact(request, id):
+    contact = ContactList.objects.get(id=id)
+    if contact:
+        contact.delete()
+    return HttpResponse()

@@ -16,16 +16,8 @@ function delete_staff() {
 			"\nNote: The staff will not beable to login to the portal again."
 	);
 	if (!a) return;
-	$("#delete_staff_btn").prop("disabled", true);
 	fetch("/delete-staff/"+id)
 	.then((res) => {
 		location.reload()
 	});
 }
-
-$("#update_staff").submit((e) => {
-	$("#update_staff_btn").prop("disabled", true);
-});
-$("#create_staff").submit((e) => {
-	$("#create_staff_btn").prop("disabled", true);
-});

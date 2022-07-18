@@ -1,4 +1,3 @@
-from email.policy import default
 from django.db import models
 from datetime import date
 
@@ -20,3 +19,15 @@ class Message(models.Model):
 
 class Random(models.Model):
     photo = models.ImageField(upload_to="uploads/random/")
+
+class ContactList(models.Model):
+    GENDERS = (
+        ('M','Male'),
+        ('F', 'Female')
+    )
+    first_name = models.CharField(max_length=20)
+    last_name = models.CharField(max_length=20)
+    phone = models.CharField(max_length=12)
+    gender = models.CharField(choices=GENDERS, max_length=7)
+    email = models.CharField(max_length=50)
+    whatsapp = models.CharField(max_length=12)

@@ -30,6 +30,9 @@ urlpatterns = [
     path("messages/", views.get_messages, name="messages"),
     path("delete-message/<int:id>", views.delete_message, name="delete_message"),
 
+    path("contact-list/", views.contact_list, name="contact_list"),
+    path("update-contact/", views.update_contact, name="update_contact"),
+    path("delete-contact/<int:id>", views.delete_contact, name="delete_contact"),
 
     path("randoms/", views.randoms, name="randoms"),
     path("delete-random/<int:id>", views.delete_random, name="delete_random"),

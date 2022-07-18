@@ -1,4 +1,6 @@
 send random password to user email or whatsapp
 allow user to change password
 make broadcast button work
-nav bars should show active
+Send message when profile photo is approved
+Js searchbar to filter students, staff, contact list
+check twilio if the number has to bee registered on whatsapp

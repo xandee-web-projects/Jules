@@ -15,7 +15,7 @@
 					<div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
 						<div class="row">
 							<div class="col-6 d-flex align-items-center">
-								<h6 class="text-white text-capitalize ps-3">Staff Table</h6>
+								<h6 class="text-white text-capitalize ps-3">Contact list</h6>
 							</div>
 							<div class="col-6 text-end" style="right: 10px; position: relative">
 								<button
@@ -29,81 +29,60 @@
 									type="button"
 									class="btn bg-gradient-dark mb-0"
 									data-toggle="modal"
-									data-target="#newStaffModal">
-									<i class="material-icons opacity-10">add</i> New staff
+									data-target="#newContact">
+									<i class="material-icons opacity-10">add</i> New contact
 								</button>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="card-body px-0 pb-2">
-					<div class="table-responsive p-0">
+					<div class="table-responsive px-2">
 						<table class="table align-items-center mb-0">
 							<thead>
 								<tr>
 									<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-										Staff
+										Name
 									</th>
-									<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-										Contact
-									</th>
-									<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-										Salary
-									</th>
-									<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-										Role
-									</th>
-									<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+									<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
 										Gender
 									</th>
+									<th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+										Phone
+									</th>
 									<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-										Date Employed
+										WhatsApp
+									</th>
+									<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+										Email
 									</th>
 									<th class="text-secondary opacity-7"></th>
 								</tr>
 							</thead>
 							<tbody>
-								{% for s in staff %}
+								{% for person in contact_list %}
 								<tr>
-									<td>
-										<a href="{% url 'profile' id=s.username %}">
-											<div class="d-flex px-2 py-1">
-												<div>
-													<img
-														src="{% static s.photo %}"
-														class="avatar avatar-sm me-3 border-radius-lg"
-														alt="user1"
-													/>
-												</div>
-												<div class="d-flex flex-column justify-content-center">
-													<h6 class="mb-0 text-sm">{{ s.first_name }} {{ s.other_names }} {{ s.last_name }}</h6>
-													<p class="text-xs text-secondary mb-0">{{ s.username }}</p>
-												</div>
-											</div>
-										</a>
-									</td>
-									<td>
-										<p class="text-xs font-weight-bold mb-0">{{s.email}}</p>
-										<p class="text-xs text-secondary mb-0">{{ s.phone }}</p>
+									<td class="align-middle text-sm">
+										<span>{{ person.first_name }} {{ person.last_name }}</span>
 									</td>
 									<td class="align-middle text-center text-sm">
-										<span class=>&#8358;{{ s.salary|intcomma }}</span>
+										<span>{{ person.gender }}</span>
 									</td>
 									<td class="align-middle text-center text-sm">
-										<span>{{s.staff_role|title}}</span>
+										<span>{{ person.phone }}</span>
 									</td>
 									<td class="align-middle text-center text-sm">
-										<span>{{s.gender}}</span>
+										<span>{{ person.whatsapp }}</span>
 									</td>
-									<td class="align-middle text-center">
-										<span class="text-secondary text-xs font-weight-bold">{{s.date_employed}}</span>
+									<td class="align-middle text-center text-sm">
+										<span>{{ person.email }}</span>
 									</td>
 									<td class="align-middle">
-										<a onclick="edit_staff('{{ s.username }}', '{{ s.first_name }}', '{{ s.last_name }}', '{{ s.other_names }}', '{{ s.email }}', '{{ s.phone }}', {{ s.salary }})"
+										<a onclick="edit({{person.id}}, '{{ person.first_name }}', '{{ person.last_name }}', '{{ person.email }}', '{{ person.phone }}')"
 										type="button"
 										class="text-secondary font-weight-bold text-xs"
 										data-toggle="modal"
-										data-target="#editStaffModal">Edit
+										data-target="#editContactModal">Edit
 										</a>
 									</td>
 								</tr>
@@ -118,18 +97,18 @@
 </div>
 
 <!-- The Modal -->
-<div class="modal fade" id="newStaffModal">
+<div class="modal fade" id="newContact">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<!-- Modal Header -->
 			<div class="modal-header">
-				<h4 class="modal-title">New staff</h4>
+				<h4 class="modal-title">New contact</h4>
 			</div>
 
 			<!-- Modal body -->
 			<div class="modal-body">
 				<div class="card-body">
-					<form role="form" class="text-start" method="post" action="{% url 'new_staff' %}">
+					<form role="form" class="text-start" method="post">
 						{% csrf_token %}
 						<div class="input-group input-group-outline mb-3">
 							<label class="form-label">First name</label>
@@ -140,19 +119,6 @@
 							<input type="text" class="form-control" name="lname" required />
 						</div>
 						<div class="input-group input-group-outline mb-3">
-							<label class="form-label">Other names</label>
-							<input type="text" class="form-control" name="onames"/>
-						</div>
-						<div class="input-group input-group-outline mb-3">
-							<select name="role" class="form-control" aria-placeholder="Role">
-								<option value="No Role">-- Select Role --</option>
-								<option value="Teacher">Teacher</option>
-								<option value="Cleaner">Cleaner</option>
-								<option value="Security">Security</option>
-								<option value="Head teacher">Headteacher</option>
-							</select>
-						</div>
-						<div class="input-group input-group-outline mb-3">
 							<label class="form-label">Email</label>
 							<input type="email" class="form-control" name="email"/>
 						</div>
@@ -161,52 +127,19 @@
 							<input type="tel" class="form-control" name="phone" required/>
 						</div>
 						<div class="input-group input-group-outline mb-3">
-							<label class="form-label">Password (Leave empty to give default)</label>
-							<input
-								type="password"
-								class="form-control"
-								name="password"
-							/>
-						</div>
-						<div class="input-group input-group-outline mb-3">
-							<label class="form-label">Date employed</label>
-							<input
-								type="date"
-								class="form-control"
-								name="date_employed"
-								required
-							/>
-						</div>
-						<div class="row">
-							<div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
-								<div class="input-group input-group-outline mb-3">
-									<label class="form-label">Salary</label>
-									<input
-										type="number"
-										class="form-control"
-										name="salary"
-										required
-									/>
-								</div>
-							</div>
-							<div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
-								<div class="input-group input-group-outline mb-3">
-									<select name="gender" class="form-control" aria-placeholder="Gender">
-										<option value="M">Male</option>
-										<option value="F">Female</option>
-									</select>
-								</div>
-							</div>
+							<select name="gender" class="form-control" aria-placeholder="Gender">
+								<option value="M">Male</option>
+								<option value="F">Female</option>
+							</select>
 						</div>
 						<div class="text-center">
 							<button type="submit" class="btn bg-gradient-primary w-100 my-4 mb-2">
-								Create
+								Add contact
 							</button>
 						</div>
 					</form>
 				</div>
 			</div>
-
 			<!-- Modal footer -->
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">
@@ -216,59 +149,34 @@
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="editStaffModal">
+<div class="modal fade" id="editContactModal">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<!-- Modal Header -->
 			<div class="modal-header">
-				<h4 class="modal-title">Edit staff</h4>
+				<h4 class="modal-title">Edit contact</h4>
 			</div>
-
 			<!-- Modal body -->
 			<div class="modal-body">
 				<div class="card-body">
 					<form role="form"
 						class="text-start"
 						method="post"
-						action="{% url 'update_staff' %}">
+						id="editform"
+						action="{% url 'update_contact' %}">
 						{% csrf_token %}
+						<input type="hidden" name="id" id="id" required>
 						<div class="input-group input-group-outline mb-3">
-							<input type="text" id="id" class="form-control" style="border: 2px dotted;" name="id" readonly/>
+							<input type="text" class="form-control" id="fname" name="fname" placeholder="First Name" required />
 						</div>
 						<div class="input-group input-group-outline mb-3">
-							<input type="text" id="fname" class="form-control" placeholder="First name" name="fname" required />
+							<input type="text" class="form-control" id="lname" name="lname" placeholder="Last name" required />
 						</div>
 						<div class="input-group input-group-outline mb-3">
-							<input type="text" id="lname" class="form-control" name="lname" placeholder="Last name" required />
+							<input type="email" class="form-control" id="email" placeholder="Email" name="email"/>
 						</div>
 						<div class="input-group input-group-outline mb-3">
-							<input type="text" id="onames" class="form-control" name="onames" placeholder="Other names" required />
-						</div>
-						<div class="input-group input-group-outline mb-3">
-							<select name="role" id="role" class="form-control" aria-placeholder="Role">
-								<option value="No Role">-- Leave blank to remain unchanged --</option>
-								<option value="Teacher">Teacher</option>
-								<option value="Cleaner">Cleaner</option>
-								<option value="Security">Security</option>
-								<option value="Head teacher">Head teacher</option>
-							</select>
-						</div>
-						<div class="input-group input-group-outline mb-3">
-							<input type="email" id="email" class="form-control" placeholder="Email" name="email" required />
-						</div>
-						<div class="input-group input-group-outline mb-3">
-							<input type="tel" id="phone" class="form-control" placeholder="Phone number" name="phone" required />
-						</div>
-						<div class="input-group input-group-outline mb-3">
-							<label class="form-label">Password (unchanged)</label>
-							<input
-								type="password"
-								class="form-control"
-								name="password"
-							/>
-						</div>
-						<div class="input-group input-group-outline mb-3">
-							<input type="number" class="form-control" name="salary" id="salary" placeholder="Salary" required/>
+							<input type="tel" class="form-control" id="phone" name="phone" placeholder="Phone" required/>
 						</div>
 						<div class="text-center">
 							<button type="submit" class="btn bg-gradient-primary w-100 my-4 mb-2">
@@ -281,8 +189,8 @@
 
 			<!-- Modal footer -->
 			<div class="modal-footer">
-				<button type="button" onclick="delete_staff()" class="btn btn-danger" id="delete_staff_btn" data-dismiss="modal">
-					Delete staff
+				<button type="button" onclick="delete_contact()" class="btn btn-danger" id="delete_staff_btn" data-dismiss="modal">
+					Delete contact
 				</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">
 					Close
@@ -296,19 +204,15 @@
 		<div class="modal-content">
 			<!-- Modal Header -->
 			<div class="modal-header">
-				<h4 class="modal-title">Broadcast message to staff</h4>
+				<h4 class="modal-title">Broadcast message</h4>
 			</div>
 			<!-- Modal body -->
 			<div class="modal-body">
 				<div class="card-body">
-					<form role="form"
-						class="text-start"
-						method="post"
-						id="update_staff"
-						action="{% url 'update_staff' %}">
+					<form role="form" class="text-start" method="post" action="">
 						{% csrf_token %}
 						<div class="input-group input-group-outline mb-3">
-							<textarea name="message" class="form-control" cols="30" rows="10" placeholder="Message" required></textarea>
+							<textarea name="message" cols="30" class="form-control" rows="10" placeholder="Message" required></textarea>
 						</div>
 						<div class="form-check form-switch ps-0">
 							<input class="form-check-input ms-auto" type="checkbox" id="flexSwitchCheckDefault" checked>
@@ -336,5 +240,5 @@
 		</div>
 	</div>
 </div>
-<script src="{% static 'staff.js' %}"></script>
+<script src="{% static 'contact-list.js' %}"></script>
 {% endblock %}
