@@ -20,7 +20,7 @@ class Message(models.Model):
 class Random(models.Model):
     photo = models.ImageField(upload_to="uploads/random/")
 
-class ContactList(models.Model):
+class Contact(models.Model):
     GENDERS = (
         ('M','Male'),
         ('F', 'Female')

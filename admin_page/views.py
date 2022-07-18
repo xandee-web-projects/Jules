@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.utils.dateparse import parse_date
 from portal.models import Class, ClassFees, PendingPhoto, Staff, Student, User
-from .models import Blog, ContactList, Message, Random
+from .models import Blog, Contact, Message, Random
 from datetime import date
 import string, random
 from django.contrib import messages
@@ -372,8 +372,8 @@ def contact_list(request):
         gender = request.POST['gender']
         phone = request.POST['phone']
         whatsapp = request.POST['phone']
-        ContactList(first_name=fname, last_name=lname, email=email, gender=gender, phone=phone, whatsapp=whatsapp).save()
-    return render(request, "admin-page/contact-list.html", {"contact_list": ContactList.objects.all().order_by('first_name')})
+        Contact(first_name=fname, last_name=lname, email=email, gender=gender, phone=phone, whatsapp=whatsapp).save()
+    return render(request, "admin-page/contact-list.html", {"contact_list": Contact.objects.all().order_by('first_name')})
 
 @login_required
 @admin_login_required
@@ -384,13 +384,13 @@ def update_contact(request):
         lname = request.POST['lname']
         email = request.POST['email']
         phone = request.POST['phone']
-        ContactList.objects.filter(id=id).update(first_name=fname, last_name=lname, email=email, phone=phone)
+        Contact.objects.filter(id=id).update(first_name=fname, last_name=lname, email=email, phone=phone)
     return redirect('contact_list')
 
 @login_required
 @admin_login_required
 def delete_contact(request, id):
-    contact = ContactList.objects.get(id=id)
+    contact = Contact.objects.get(id=id)
     if contact:
         contact.delete()
     return HttpResponse()
