@@ -1,5 +1,5 @@
 import os
-import re
+from this import s
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
@@ -9,7 +9,9 @@ from .models import Blog, Contact, Message, Random
 from datetime import date
 import string, random
 from django.contrib import messages
-
+from django.core.mail import send_mail, send_mass_mail
+from django.conf import settings
+from django.template import loader
 
 # Create your views here.
 
@@ -47,10 +49,10 @@ def editblogs(request):
 @admin_login_required
 def new_blog(request):
     if request.method == "POST":
-        heading = request.POST['heading']
-        desc = request.POST['desc']
-        photo = request.FILES['photo']
-        date = request.POST['date']
+        heading = request.POST.get('heading')
+        desc = request.POST.get('desc')
+        photo = request.FILES.get('photo')
+        date = request.POST.get('date')
         blog = Blog(heading=heading, desc=desc, photo=photo)
         if date:
             blog.date = date
@@ -62,17 +64,14 @@ def new_blog(request):
 @admin_login_required
 def update_blog(request):
     if request.method == "POST":
-        id = request.POST['id']
+        id = request.POST.get('id')
         blog = Blog.objects.get(id=id)
         if blog:
             messages.success(request, f"Blog {blog.heading} updated")
-            heading = request.POST['heading']
-            desc = request.POST['desc']
-            date = request.POST['date']
-            try:
-                photo = request.FILES['photo']
-            except:
-                photo = None
+            heading = request.POST.get('heading')
+            desc = request.POST.get('desc')
+            date = request.POST.get('date')
+            photo = request.FILES.get('photo')
             blog.heading = heading
             blog.desc = desc
             blog.date = parse_date(date)
@@ -103,18 +102,18 @@ def staff(request):
 
 @login_required
 @admin_login_required
-def new_staff(request, methdods=['POST']):
+def new_staff(request):
     if request.method == "POST":
-        fname = request.POST['fname']
-        lname = request.POST['lname']
-        onames = request.POST['onames']
-        role = request.POST['role']
-        email = request.POST['email']
-        gender = request.POST['gender']
-        phone = request.POST['phone']
-        salary = request.POST['salary']
-        pwd = request.POST['password']
-        date_employed = request.POST['date_employed']
+        fname = request.POST.get('fname')
+        lname = request.POST.get('lname')
+        onames = request.POST.get('onames')
+        role = request.POST.get('role')
+        email = request.POST.get('email')
+        gender = request.POST.get('gender')
+        phone = request.POST.get('phone')
+        salary = request.POST.get('salary')
+        pwd = request.POST.get('password')
+        date_employed = request.POST.get('date_employed')
         last = Staff.objects.last()
         yr = str(date.today().year)[2:]
         if last:
@@ -122,9 +121,17 @@ def new_staff(request, methdods=['POST']):
         else:
             num = 1
         rand_pwd = ''.join(random.choices(string.ascii_lowercase+string.digits, k=8))
-        staff = Staff.objects.create_user(username=f'1{yr}{str(num+1).zfill(3)}', password=rand_pwd if pwd == "" else pwd, email=email, gender=gender,
+        password = rand_pwd if pwd == "" else pwd
+        staff = Staff.objects.create_user(username=f'1{yr}{str(num+1).zfill(3)}', password=password, email=email, gender=gender,
             first_name=fname, last_name=lname, other_names=onames, role='staff', staff_role=role.lower(), phone=phone, salary=salary, date_employed=parse_date(date_employed))
         staff.save()
+
+        if email != "":
+            err = account_created_message(staff.email, staff.get_full_name(), staff.username, password if pwd != password else "*"*len(password), staff.staff_role)
+            if err != 1:
+                messages.error(request, "An email containing this user's credentials wasn't sent.")
+            else:
+                messages.success(request, "An email containing this user's credentials was sent successfully.")
         messages.success(request, f"Staff created")
     return redirect('staff')
 
@@ -167,8 +174,8 @@ def delete_staff(request, id):
 @admin_login_required
 def classes(request):
     if request.method == "POST":
-        cid = request.POST['class']
-        tid = request.POST['teacher']
+        cid = request.POST.get('class')
+        tid = request.POST.get('teacher')
         c = Class.objects.get(id=cid)
         teacher = Staff.objects.filter(username=tid).first()
         if tid == "None" and c:
@@ -187,10 +194,7 @@ def classes(request):
 @admin_login_required
 def students(request):
     c = None
-    try:
-        class_id = request.GET['class']
-    except:
-        class_id = None
+    class_id = request.GET.get('class')
     if class_id:
         get_class = Class.objects.get(id=class_id)
         if get_class:
@@ -204,26 +208,35 @@ def students(request):
 @admin_login_required
 def new_student(request):
     if request.method == "POST":
-        fname = request.POST['fname']
-        lname = request.POST['lname']
-        onames = request.POST['onames']
-        email = request.POST['email']
-        gender = request.POST['gender']
-        phone = request.POST['phone']
-        pwd = request.POST['password']
-        date_admitted = request.POST['date_admitted']
-        dob = request.POST['dob']
+        fname = request.POST.get('fname')
+        lname = request.POST.get('lname')
+        onames = request.POST.get('onames')
+        email = request.POST.get('email')
+        gender = request.POST.get('gender')
+        phone = request.POST.get('phone')
+        pwd = request.POST.get('password')
+        date_admitted = request.POST.get('date_admitted')
+        dob = request.POST.get('dob')
         last = Student.objects.last()
         yr = str(date.today().year)[2:]
-        _class = Class.objects.filter(id=request.POST['class']).first()
+        _class = Class.objects.filter(id=request.POST.get('class')).first()
         if last:
             num = int(last.username[-3:])
         else:
             num = 0
-        rand_pwd = ''.join(random.choices(string.ascii_lowercase+string.digits, k=8)) 
-        student = Student.objects.create_user(username=f'{yr}{str(num+1).zfill(3)}', password=rand_pwd if pwd == "" else pwd, email=email, gender=gender,
+        rand_pwd = ''.join(random.choices(string.ascii_lowercase+string.digits, k=8))
+        password = rand_pwd if pwd == "" else pwd
+        student = Student.objects.create_user(username=f'{yr}{str(num+1).zfill(3)}', password=password, email=email, gender=gender,
             first_name=fname, last_name=lname, other_names=onames, role='student', current_class=_class, phone=phone, dob=parse_date(dob), date_admitted=parse_date(date_admitted))
         student.save()
+        if email != "":
+            err = account_created_message(student.email, student.get_full_name(), student.username, password if pwd != password else "*"*len(password), student.current_class)
+            if err != 1:
+                messages.error(request, "An email containing this user's credentials wasn't sent.")
+            else:
+                messages.success(request, "An email containing this user's credentials was sent successfully.")
+        # Send message with twilio api
+
         messages.success(request, f"Student created")
     return redirect('students')
 
@@ -256,7 +269,7 @@ def update_student(request):
 @admin_login_required
 def delete_student(request, id):
     student = Student.objects.get(username=id)
-    if student:
+    if student: 
         del_photo(student.photo)
         student.delete()
     return HttpResponse()
@@ -264,7 +277,7 @@ def delete_student(request, id):
 @login_required
 @admin_login_required
 def get_messages(request):
-    return render(request, 'admin-page/messages.html', {'messages':Message.objects.all().order_by('-time')})
+    return render(request, 'admin-page/messages.html', {'message_list':Message.objects.all().order_by('-time')})
 
 @login_required
 @admin_login_required
@@ -325,11 +338,11 @@ def delete_random(request, id):
 @admin_login_required
 def edit_fees(request):
     if request.method == "POST":
-        id = request.POST['id']
+        id = request.POST.get('id')
         c = ClassFees.objects.get(id=id)
         if c:
-            new_fee = request.POST['new_fee']
-            return_fee = request.POST['return_fee']
+            new_fee = request.POST.get('new_fee')
+            return_fee = request.POST.get('return_fee')
             c.new_fee = new_fee
             c.return_fee = return_fee
             c.save()
@@ -350,11 +363,11 @@ def delete_class(request, id):
 @admin_login_required
 def new_subclass(request):
     if request.method == "POST":
-        _class = request.POST['parent_class']
+        _class = request.POST.get('parent_class')
         try:
             c = Class.objects.get(id=_class)
-            name1 = request.POST['subclass1']
-            name2 = request.POST['subclass2']
+            name1 = request.POST.get('subclass1')
+            name2 = request.POST.get('subclass2')
             Class(name=c.name, subclass=name1).save()
             Class(name=c.name, subclass=name2).save()
         except Exception as e:
@@ -366,12 +379,12 @@ def new_subclass(request):
 @admin_login_required
 def contact_list(request):
     if request.method == "POST":
-        fname = request.POST['fname']
-        lname = request.POST['lname']
-        email = request.POST['email']
-        gender = request.POST['gender']
-        phone = request.POST['phone']
-        whatsapp = request.POST['phone']
+        fname = request.POST.get('fname')
+        lname = request.POST.get('lname')
+        email = request.POST.get('email')
+        gender = request.POST.get('gender')
+        phone = request.POST.get('phone')
+        whatsapp = request.POST.get('phone')
         Contact(first_name=fname, last_name=lname, email=email, gender=gender, phone=phone, whatsapp=whatsapp).save()
     return render(request, "admin-page/contact-list.html", {"contact_list": Contact.objects.all().order_by('first_name')})
 
@@ -379,11 +392,11 @@ def contact_list(request):
 @admin_login_required
 def update_contact(request):
     if request.method == "POST":
-        id = request.POST['id']
-        fname = request.POST['fname']
-        lname = request.POST['lname']
-        email = request.POST['email']
-        phone = request.POST['phone']
+        id = request.POST.get('id')
+        fname = request.POST.get('fname')
+        lname = request.POST.get('lname')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
         Contact.objects.filter(id=id).update(first_name=fname, last_name=lname, email=email, phone=phone)
     return redirect('contact_list')
 
@@ -394,3 +407,36 @@ def delete_contact(request, id):
     if contact:
         contact.delete()
     return HttpResponse()
+
+
+def account_created_message(to, name, id, pwd, category):
+    html = loader.render_to_string(
+        "new_user_email.html", {"id": id, "name":name, "password":pwd, "class":category, "portal_url": settings.PORTAL_DOMAIN}
+    )
+    err = send_mail("Jules Account Created", message="", from_email=settings.EMAIL_HOST_USER, recipient_list=[to], html_message=html, fail_silently=True)
+    return err
+
+def email_broadcast(subject, message, people):
+    send_mass_mail(((subject, message, settings.EMAIL_HOST_USER, [p.email]) for p in people.objects.all()), fail_silently=True)
+
+def broadcast(request):
+    if request.method == "POST":
+        people = request.POST.get('set')
+        subject = request.POST.get('subject')
+        message = request.POST.get('msg')
+        to_email = request.POST.get('toEmail')
+        to_WA = request.POST.get('toWA')
+        if message:
+            if to_email:
+                email_broadcast(subject, message, people_filter(people))
+            if to_WA:
+                pass
+    return redirect(request.META.get('HTTP_REFERER'))
+
+def people_filter(_set):
+    if _set == "staff":
+        return Staff
+    elif _set == "students":
+        return Student
+    elif _set == "contact":
+        return Contact

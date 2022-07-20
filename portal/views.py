@@ -8,7 +8,7 @@ from django.contrib import messages
 # Create your views here.
 def login_page(request):
     if request.method == 'POST':
-        user = authenticate(username=request.POST['id'], password=request.POST['password'])
+        user = authenticate(username=request.POST.get('id'), password=request.POST.get('password'))
         if user:
             login(request, user)
             if user.is_superuser:
@@ -40,7 +40,7 @@ def upload_photo(request, id):
             user.pendingphoto.delete()
         except:
             pass
-        photo = PendingPhoto(photo=request.FILES['photo'], user=user)
+        photo = PendingPhoto(photo=request.FILES.get('photo'), user=user)
         photo.save()
     return redirect('profile', id=id)
 

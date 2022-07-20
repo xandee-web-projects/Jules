@@ -20,7 +20,7 @@ urlpatterns = [
     path("students/", views.students, name="students"),
     path("new-student/", views.new_student, name="new_student"),
     path("update-student/", views.update_student, name="update_student"),
-    path("delete-student/", views.delete_student, name="delete_student"),
+    path("delete-student/<str:id>", views.delete_student, name="delete_student"),
 
     path("classes/", views.classes, name="classes"),
     path("new-subclass/", views.new_subclass, name="new_subclass"),
@@ -37,6 +37,7 @@ urlpatterns = [
     path("randoms/", views.randoms, name="randoms"),
     path("delete-random/<int:id>", views.delete_random, name="delete_random"),
     
+    path("broadcast/", views.broadcast, name="broadcast"),
 
     path("discard-photo/<int:id>", views.discard_photo, name="discard_photo"),
     path("pending-photos/", views.pending_photos, name="pending_photos"),

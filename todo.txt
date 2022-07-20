@@ -1,6 +1,16 @@
-send random password to user email or whatsapp
 allow user to change password
 make broadcast button work
 Send message when profile photo is approved
 Js searchbar to filter students, staff, contact list
-check twilio if the number has to bee registered on whatsapp
+Js build custom form
+check twilio if the number has to be registered on whatsapp
+Allow read more for blogs on the website
+
+staff recieve whatsapp
+student recieve whatsapp
+broadcast emails
+
+on staff and student email, add button to login page
+Perfect creation emails
+
+Next commit is on filtering and broadcast and sending emails

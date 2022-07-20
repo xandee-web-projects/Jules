@@ -1,4 +1,5 @@
 {% extends 'bases/base.html' %}
+{% block title %}Messages{% endblock %}
 {% block content %}
 <div class="container-fluid pt-3">
     <section class="py-5">
@@ -10,7 +11,7 @@
                 </div>
             </div>
             <div class="row mt-lg-5 mt-4 removable">
-                {% for msg in messages %}
+                {% for msg in message_list %}
                 <div class="col-lg-4 col-md-6 mb-5" id="{{msg.id}}">
                     <div class="card mb-3">
                         <div class="card-body border-radius-lg position-relative overflow-hidden pb-4">

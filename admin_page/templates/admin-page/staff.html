@@ -9,6 +9,12 @@
 <div class="container-fluid py-4">
 	<div class="row">
 		<div class="col-12">
+			<div class="input-group input-group-outline">
+				<label class="form-label">Search</label>
+				<input type="text" class="form-control" id="search">
+			</div>
+		</div>
+		<div class="col-12">
 			<div class="card my-4">
 				<div class="card-header pb-0 p-3"></div>
 				<div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
@@ -17,7 +23,7 @@
 							<div class="col-6 d-flex align-items-center">
 								<h6 class="text-white text-capitalize ps-3">Staff Table</h6>
 							</div>
-							<div class="col-6 text-end" style="right: 10px; position: relative">
+							<div class="col-6 text-end" style="right: 10px; position: relative; padding-left: 0;">
 								<button
 									type="button"
 									class="btn bg-gradient-dark mb-0"
@@ -76,7 +82,7 @@
 													/>
 												</div>
 												<div class="d-flex flex-column justify-content-center">
-													<h6 class="mb-0 text-sm">{{ s.first_name }} {{ s.other_names }} {{ s.last_name }}</h6>
+													<h6 class="mb-0 text-sm fullName">{{ s.first_name }} {{ s.other_names }} {{ s.last_name }}</h6>
 													<p class="text-xs text-secondary mb-0">{{ s.username }}</p>
 												</div>
 											</div>
@@ -291,50 +297,9 @@
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="broadcastModal">
-	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content">
-			<!-- Modal Header -->
-			<div class="modal-header">
-				<h4 class="modal-title">Broadcast message to staff</h4>
-			</div>
-			<!-- Modal body -->
-			<div class="modal-body">
-				<div class="card-body">
-					<form role="form"
-						class="text-start"
-						method="post"
-						id="update_staff"
-						action="{% url 'update_staff' %}">
-						{% csrf_token %}
-						<div class="input-group input-group-outline mb-3">
-							<textarea name="message" class="form-control" cols="30" rows="10" placeholder="Message" required></textarea>
-						</div>
-						<div class="form-check form-switch ps-0">
-							<input class="form-check-input ms-auto" type="checkbox" id="flexSwitchCheckDefault" checked>
-							<label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault">To email</label>
-						</div>
-						<div class="form-check form-switch ps-0">
-							<input class="form-check-input ms-auto" type="checkbox" id="flexSwitchCheckDefault" checked>
-							<label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault">To WhatsApp</label>
-						</div>
-						<div class="text-center">
-							<button type="submit" class="btn bg-gradient-primary w-100 my-4 mb-2">
-								Send
-							</button>
-						</div>
-					</form>
-				</div>
-			</div>
+{% with set="staff"  %}
+	{% include 'admin-page/broadcast-modal.html'   %}
+{% endwith %}
 
-			<!-- Modal footer -->
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">
-					Close
-				</button>
-			</div>
-		</div>
-	</div>
-</div>
 <script src="{% static 'staff.js' %}"></script>
 {% endblock %}

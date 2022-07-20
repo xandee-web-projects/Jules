@@ -17,3 +17,25 @@ function delete_contact() {
 		location.reload()
 	});
 }
+
+$(document).ready(function () {
+	searchInput = document.getElementById("search")
+	users = document.querySelectorAll(".fullName")
+	
+	searchInput.addEventListener("input", e => {
+		const value = e.target.value.toLowerCase()
+		users.forEach(user => {
+			const isVisible = user.innerHTML.toLowerCase().includes(value)
+			console.log(isVisible)
+			let parent = user.parentElement.parentElement
+			if (!isVisible){
+				parent.style.display = "none"
+			}
+			else{
+				parent.style.display = ""
+			}
+			
+		  })
+	})
+	
+});
