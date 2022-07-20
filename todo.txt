@@ -12,5 +12,3 @@ broadcast emails
 
 on staff and student email, add button to login page
 Perfect creation emails
-
-Next commit is on filtering and broadcast and sending emails
