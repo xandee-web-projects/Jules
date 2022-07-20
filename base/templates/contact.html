@@ -3,7 +3,13 @@
 {% block title %}Contact Us{% endblock %}
 {% block content %}
 
-<section class="ftco-section contact-section">
+{% if name %}
+<div style="padding-top: 60px;">
+	<b><h1 class="text-center font-weight-bold">Thanks {{name}}!!</h1></b>
+	<p class="text-center">We would respond to you shortly</p>
+</div>
+{% endif %}
+<section class="ftco-section contact-section" style="padding-bottom: 10px;">
 	<div class="container">
 		<div class="row d-flex mb-5 contact-info">
 			<div class="col-md-3 d-flex">
@@ -34,7 +40,6 @@
 		</div>
 	</div>
 </section>
-
 <section class="ftco-section ftco-no-pt ftco-no-pb contact-section">
 	<div class="container">
 		<div class="row d-flex align-items-stretch no-gutters">
@@ -74,5 +79,4 @@
 		</div>
 	</div>
 </section>
-
 {% endblock %}

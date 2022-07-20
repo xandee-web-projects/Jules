@@ -2,6 +2,7 @@ from django.shortcuts import render
 from random import randint
 from admin_page.models import Blog, Message, Random
 from portal.models import ClassFees
+from django.contrib import messages
 
 # Create your views here.
 def index(request):
@@ -13,17 +14,21 @@ def index(request):
         randoms.append(r)
         all_randoms.remove(r)
     return render(request, "index.html", {"blogs":Blog.objects.all().order_by('-date')[:3], "randoms":randoms})
+
 def about(request):
     return render(request, "about.html")
 def blog(request):
     return render(request, "blog.html", {"blogs":Blog.objects.all().order_by('-date')})
 def contact(request):
+    content = {}
     if request.method == "POST":
         name = request.POST['name']
         contact = request.POST['contact']
         sub = request.POST['subject']
         msg = request.POST['msg']
         Message(name=name, contact=contact, subject=sub, message=msg).save()
-    return render(request, "contact.html")
+        content = {"name": name}
+    return render(request, "contact.html", content)
+
 def fees(request):
     return render(request, "fees.html", {"fees": ClassFees.objects.all()})

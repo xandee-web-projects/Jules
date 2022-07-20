@@ -36,12 +36,19 @@ def home(request):
 def upload_photo(request, id):
     user = User.objects.filter(username=id).first()
     if user:
+        try:
+            user.pendingphoto.delete()
+        except:
+            pass
         photo = PendingPhoto(photo=request.FILES['photo'], user=user)
         photo.save()
     return redirect('profile', id=id)
 
 def page_not_found_view(request, exception):
     return render(request, '404.html', status=404)
+
+def forgot_password(request):
+    return render(request, 'forgot-password.html')
 
 def logout_user(request):
     logout(request)
