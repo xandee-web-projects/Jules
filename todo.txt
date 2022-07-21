@@ -1,14 +1,12 @@
 allow user to change password
-make broadcast button work
 Send message when profile photo is approved
-Js searchbar to filter students, staff, contact list
 Js build custom form
 check twilio if the number has to be registered on whatsapp
 Allow read more for blogs on the website
 
 staff recieve whatsapp
 student recieve whatsapp
-broadcast emails
+contact recieve whatsapp
+
 
 on staff and student email, add button to login page
-Perfect creation emails

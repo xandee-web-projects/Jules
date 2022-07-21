@@ -19,6 +19,9 @@ def login_page(request):
             return redirect('login')
     return render(request, 'login.html')
 
+@login_required
+def create_test(request):
+    return render(request, "create-test.html")
 
 @login_required
 def profile(request, id):
