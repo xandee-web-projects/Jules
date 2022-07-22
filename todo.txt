@@ -3,6 +3,7 @@ Send message when profile photo is approved
 Js build custom form
 check twilio if the number has to be registered on whatsapp
 Allow read more for blogs on the website
+Change pictures on the main website
 
 staff recieve whatsapp
 student recieve whatsapp

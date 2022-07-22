@@ -14,30 +14,29 @@
     </div>
   </div>
   <template question-template>
-    <li>
+    <li questionNumber>
       <div class="input-group input-group-outline mb-3">
-        <label class="form-label">Question</label>
-        <input type="text" class="form-control" name="heading" required />
-        <button class="btn btn-link me-auto border-0" style="margin-bottom:0%">
+        <input type="text" placeholder="Question" class="form-control" required />
+        <button type="button" class="btn btn-link me-auto border-0 q-delete-btn btn-icons">
           <i class="material-icons text-lg">delete</i>
         </button>
       </div>
-      <ol id="options" type="A">
+      <ol type="A">
         <!-- Options go here -->
       </ol>
       <button type="button" class="btn bg-gradient-primary buttons add_option"><i class="material-icons opacity-10">add</i>option</button>
-      <button type="button" class="btn bg-gradient-primary buttons"><i class="material-icons opacity-10">add</i>checkbox</button>
-      <button type="button" class="btn bg-gradient-primary buttons"><i class="material-icons opacity-10">add</i>input</button>
     </li>
   </template>
   <template option-template>
-    <li>
+    <li optionNumber>
       <div class="input-group input-group-outline mb-3">
-        <label class="form-label">Option</label>
-        <input type="text" class="form-control" name="" required />
-        <a class="btn btn-link me-auto border-0" style="margin-bottom:0%">
+        <input type="text" class="form-control" placeholder="Option" required />
+        <button type="button" class="btn btn-link me-auto border-0 btn-icons choose-ans">
+          <i class="material-icons text-lg">done_outline</i>
+        </button>
+        <button class="btn btn-link me-auto border-0 q-delete-btn btn-icons">
           <i class="material-icons text-lg">delete</i>
-        </a>
+        </button>
       </div>
     </li>
   </template>
@@ -48,29 +47,7 @@
         <div>
           <ol type="1" id="questions">
             <!-- Question div -->
-            <li>
-              <div class="input-group input-group-outline mb-3">
-                <label class="form-label">Question</label>
-                <input type="text" class="form-control" name="heading" required />
-                <button class="btn btn-link me-auto border-0" style="margin-bottom:0%">
-                  <i class="material-icons text-lg">delete</i>
-                </button>
-              </div>
-              <ol type="A">
-                <li>
-                  <div class="input-group input-group-outline mb-3">
-                    <label class="form-label">Option</label>
-                    <input type="text" class="form-control" name="" required />
-                    <a class="btn btn-link me-auto border-0" style="margin-bottom:0%">
-                      <i class="material-icons text-lg">delete</i>
-                    </a>
-                  </div>
-                </li>
-              </ol>
-              <button type="button" class="btn bg-gradient-primary buttons add_option" ><i class="material-icons opacity-10">add</i>option</button>
-              <button type="button" class="btn bg-gradient-primary buttons"><i class="material-icons opacity-10">add</i>checkbox</button>
-              <button type="button" class="btn bg-gradient-primary buttons"><i class="material-icons opacity-10">add</i>input</button>
-            </li>
+            
             <!-- Question div end -->
           </ol>
 
@@ -88,35 +65,5 @@
 <head>
   <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
 </head>
-<div class="wrapper">
-  <div id="survey_options">
-    <input
-      type="text"
-      name="survey_options[]"
-      class="survey_options"
-      size="50"
-      placeholder="Name"
-    />
-    <input
-      type="text"
-      name="survey_options[]"
-      class="survey_options"
-      size="50"
-      placeholder="Email"
-    />
-    <input
-      type="text"
-      name="survey_options[]"
-      class="survey_options"
-      size="50"
-      placeholder="Another Field"
-    />
-  </div>
-  <div class="controls">
-    <a href="#" id="add_more_fields"><i class="fa fa-plus"></i>Add More</a>
-    <a href="#" id="remove_fields"><i class="fa fa-plus"></i>Remove Field</a>
-  </div>
-</div>
 <script src="{% static 'js/create-test.js' %}"></script>
-
 {% endblock %}
