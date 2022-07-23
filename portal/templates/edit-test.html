@@ -1,16 +1,15 @@
 {% extends 'bases/base.html' %}
 {% load static %}
+{% block title %}
+  {{test.name}}
+{% endblock %}
 {% block content %}
 <div class="container-fluid pt-3">
   <div class="row removable">
-    <div class="col-lg-8">
+    <div class="col-lg-12">
       <h3 class="text-center" spellcheck="false" data-ms-editor="true">
-        Test Name
+        {{test.name}}
       </h3>
-    </div>
-    <div class="col-lg-4">
-      <button class="btn btn-primary mb-4" type="button">Save</button>
-      <button class="btn btn-secondary mb-4" type="button">Close</button>
     </div>
   </div>
   <template question-template>
@@ -34,7 +33,7 @@
         <button type="button" class="btn btn-link me-auto border-0 btn-icons choose-ans">
           <i class="material-icons text-lg">done_outline</i>
         </button>
-        <button class="btn btn-link me-auto border-0 q-delete-btn btn-icons">
+        <button type="button" class="btn btn-link me-auto border-0 q-delete-btn btn-icons">
           <i class="material-icons text-lg">delete</i>
         </button>
       </div>
@@ -44,13 +43,17 @@
     <div class="card-body">
       <form role="form" class="text-start" method="post" action="">
         {% csrf_token %}
+        <div class="col-lg-4">
+          <button class="btn btn-primary mb-4" type="submit">Save</button>
+          <button class="btn btn-success mb-4" type="button">publish</button>
+          <a href="javascript:history.back()" class="btn btn-secondary mb-4" type="button">Close</a>
+        </div>
         <div>
           <ol type="1" id="questions">
             <!-- Question div -->
             
             <!-- Question div end -->
           </ol>
-
         </div>
         <div class="text-center">
           <button type="button" id="add_question" class="btn bg-gradient-primary w-100 my-4 mb-2">
@@ -63,7 +66,7 @@
 </div>
 
 <head>
-  <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/edit-test.css' %}" />
 </head>
-<script src="{% static 'js/create-test.js' %}"></script>
+<script src="{% static 'js/edit-test.js' %}"></script>
 {% endblock %}

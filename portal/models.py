@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
 class User(AbstractUser):
     GENDERS = (
         ('M','Male'),
@@ -78,3 +77,19 @@ class Student(User):
     current_class = models.ForeignKey(Class, on_delete=models.SET_NULL, null=True)
     date_admitted = models.DateField()
     dob = models.DateField()
+
+
+class Test(models.Model):
+    name = models.CharField(max_length=40)
+    teacher = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    status = models.BooleanField(default=False)
+    code = models.CharField(max_length=5, null=True, blank=True)
+
+
+class Question(models.Model):
+    text = models.TextField()
+    test = models.ForeignKey(Test, on_delete=models.CASCADE)
+
+class Option(models.Model):
+    text = models.TextField()
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
