@@ -1,11 +1,11 @@
-from traceback import print_tb
+import datetime
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import Staff, Student, Test, User, PendingPhoto
+from .models import Option, Question, Staff, Student, Test, User, PendingPhoto
 from django.contrib import messages
-import string, random
+import string, random, json, hashlib
 
 
 def staff_login_required(f):
@@ -33,32 +33,44 @@ def login_page(request):
 @login_required
 @staff_login_required
 def edit_test(request, id):
-    if request.method == "POST":
-        form_data = request.POST
-        for key in form_data:
-            if key == "csrfmiddlewaretoken":
-                continue
     test = Test.objects.get(id=id)
     if not test:
         raise Http404
     elif test and request.user.username != test.teacher.username:
         messages.error(request, "You are not the user that created this test")
+    elif request.method == "POST":
+        form_data = request.POST
+        print(form_data.get("time"))
+        new_test = Test(name=test.name, teacher=test.teacher, status=test.status, id=test.id, code=test.code)
+        test.delete()
+        del test
+        new_test.save()
+        test = new_test
+        question = None
+        for key in form_data.keys():
+            if key == "csrfmiddlewaretoken":
+                continue
+            elif key in ["hrs", "mins"]:
+                print(datetime.strptime(f"{form_data.get('hrs')}:{form_data.get('mins')}", '%H:%M').time())
+            elif key.find("-") == -1:
+                question = Question.objects.create(number=key, text=form_data.get(key), test=test)
+                continue
+            elif key.find("-") != -1:
+                question_ans = key.split("-")
+                if "ans" in question_ans:
+                    answer = True
+                else:
+                    answer = False
+                if question:
+                    Option.objects.create(text=form_data.get(key), question=question, option_id=question_ans[1], answer=answer)
+                else:
+                    messages.error(request, "Something went wrong while trying to save")
+                    break
     return render(request, "edit-test.html", {"test": test})
 
 @login_required
 @staff_login_required
 def tests(request):
-    if request.method == "POST":
-        id = request.POST.get("id")
-        name = request.POST.get("name")
-        if id:
-            test = Test.objects.get(id=id)
-            former = test.name
-            test.name = name
-            test.save()
-            messages.success(f"Test renamed from {former} to {test.name} !")
-        else:
-            messages.error(request, f"Test \"{name}\" was not found")
     return render(request, "tests.html", {"tests":Test.objects.order_by("-id")})
 
 @login_required
@@ -68,10 +80,26 @@ def new_test(request):
         name = request.POST.get('name')
         test = Test(name=name, teacher=Staff.objects.get(username=request.user.username))
         test.save()
-        code = f'{test.id}'.join(random.choices(string.ascii_lowercase+string.digits, k=5))
-        test.code = code
+        test.code = f'{test.id}'.join(random.choices(string.ascii_lowercase+string.digits, k=3))
         test.save()
-        messages.success("Test created !")
+        messages.success(request, "Test created !")
+    return redirect("edit_test", id=test.id)
+
+@login_required
+@staff_login_required
+def tests(request):
+    return render(request, "tests.html", {"tests":Test.objects.order_by("-id")})
+
+@login_required
+@staff_login_required
+def new_test(request):
+    if request.method == "POST":
+        name = request.POST.get('name')
+        test = Test(name=name, teacher=Staff.objects.get(username=request.user.username))
+        test.save()
+        test.code = f'{test.id}'.join(random.choices(string.ascii_lowercase+string.digits, k=3))
+        test.save()
+        messages.success(request, "Test created !")
     return redirect("edit_test", id=test.id)
 
 @login_required

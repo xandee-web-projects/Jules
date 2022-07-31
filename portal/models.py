@@ -87,9 +87,12 @@ class Test(models.Model):
 
 
 class Question(models.Model):
+    number = models.IntegerField()
     text = models.TextField()
     test = models.ForeignKey(Test, on_delete=models.CASCADE)
 
 class Option(models.Model):
     text = models.TextField()
+    option_id = models.IntegerField()
+    answer = models.BooleanField(default=False)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)

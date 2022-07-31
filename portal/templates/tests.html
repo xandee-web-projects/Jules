@@ -63,7 +63,11 @@
                     </a>
                   </td>
                   <td class="align-middle text-center text-sm">
-                    <span>{{test.status}}</span>
+                    {% if test.status %}
+                    <span class="badge badge-sm bg-gradient-success">Public</span>
+                    {% else %}
+                    <span class="badge badge-sm bg-gradient-secondary">Private</span>
+                    {% endif %}
                   </td>
                   <td class="align-middle text-center text-sm">
                     <span></span>
