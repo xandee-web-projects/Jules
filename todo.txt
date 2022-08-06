@@ -9,6 +9,7 @@ staff recieve whatsapp
 student recieve whatsapp
 contact recieve whatsapp
 
+Pay fees online
 
 on staff and student email, add button to login page
 

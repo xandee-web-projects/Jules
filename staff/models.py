@@ -8,6 +8,7 @@ class Test(models.Model):
     teacher = models.ForeignKey(Staff, on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
     time = models.TimeField(default=time.fromisoformat("00:10"))
+    done = models.IntegerField(default=0)
     code = models.CharField(max_length=5, null=True, blank=True)
 
 class Question(models.Model):

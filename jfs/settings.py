@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'base',
     'admin_page',
     'portal',
-    'staff'
+    'staff',
+    'student',
 ]
 
 AUTH_USER_MODEL = 'portal.User'
@@ -130,7 +131,7 @@ LOGIN_URL = '/login'
 MEDIA_URL = 'uploads/'
 
 STATICFILES_DIRS = [
-    BASE_DIR/ 'uploads'
+    BASE_DIR/ ''
 ]
 
 # Default primary key field type

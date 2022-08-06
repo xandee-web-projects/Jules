@@ -16,7 +16,7 @@
     <div class="card-body">
       <form role="form" class="text-start" id="form" method="post" action="">
         {% csrf_token %}
-        <h4>Timer</h4>
+        {% include 'timer.html'   %}
         <div>
           <ol type="1" id="questions">
             <!-- Question div -->
@@ -32,6 +32,7 @@
                   <input type="radio" name="{{question.number}}">
                   <span class="text-sm">{{option.text}}</span>
                   </div>
+
                 </li>
                 {% endfor %}  
                 </ul>
