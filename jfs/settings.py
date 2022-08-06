@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'base',
     'admin_page',
     'portal',
+    'staff'
 ]
 
 AUTH_USER_MODEL = 'portal.User'
@@ -63,7 +64,7 @@ ROOT_URLCONF = 'jfs.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "email_templates"],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -129,7 +130,7 @@ LOGIN_URL = '/login'
 MEDIA_URL = 'uploads/'
 
 STATICFILES_DIRS = [
-    BASE_DIR/''
+    BASE_DIR/ 'uploads'
 ]
 
 # Default primary key field type

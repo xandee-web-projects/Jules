@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+
 class User(AbstractUser):
     GENDERS = (
         ('M','Male'),
@@ -13,10 +14,10 @@ class User(AbstractUser):
     role = models.CharField(max_length=10, choices=ROLES, default=ROLES[1][1])
     phone = models.CharField(max_length=12, blank=True)
     other_names = models.CharField(max_length=60, blank=True)
-    photo = models.ImageField(blank=True, null=True, upload_to="uploads/users/", default="uploads/users/default.png")
+    photo = models.ImageField(blank=True, null=True, upload_to="users/", default="users/default.png")
 
 class PendingPhoto(models.Model):
-    photo = models.ImageField(upload_to="uploads/users/")
+    photo = models.ImageField(upload_to="users/")
     user = models.OneToOneField(User, editable=True, on_delete=models.CASCADE)
 
 class Staff(User):
@@ -77,22 +78,3 @@ class Student(User):
     current_class = models.ForeignKey(Class, on_delete=models.SET_NULL, null=True)
     date_admitted = models.DateField()
     dob = models.DateField()
-
-
-class Test(models.Model):
-    name = models.CharField(max_length=40)
-    teacher = models.ForeignKey(Staff, on_delete=models.CASCADE)
-    status = models.BooleanField(default=False)
-    code = models.CharField(max_length=5, null=True, blank=True)
-
-
-class Question(models.Model):
-    number = models.IntegerField()
-    text = models.TextField()
-    test = models.ForeignKey(Test, on_delete=models.CASCADE)
-
-class Option(models.Model):
-    text = models.TextField()
-    option_id = models.IntegerField()
-    answer = models.BooleanField(default=False)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)

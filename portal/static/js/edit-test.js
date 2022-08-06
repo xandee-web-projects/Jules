@@ -88,6 +88,10 @@ $(document).ready(function () {
     if (c) return;
     e.target.click()
   })
+  $("#publish").click((e) => {
+    $("#form").append("<input type='hidden' name='publish' value='true'>")
+    $("#form").submit()
+  })
 });
 
 

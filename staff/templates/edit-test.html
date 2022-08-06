@@ -1,4 +1,4 @@
-{% extends 'bases/base.html' %}
+{% extends 'portal/base.html' %}
 {% load static %}
 {% block title %}
   {{test.name}}
@@ -42,12 +42,17 @@
   </template>
   <div class="card">
     <div class="card-body">
-      <form role="form" class="text-start" id="form" method="post" action="">
+      <form role="form" class="text-start" id="form" method="post">
         {% csrf_token %}
-        <div class="col-lg-4">
-          <button class="btn btn-primary mb-4" type="submit">Save</button>
-          <button class="btn btn-success mb-4" type="button">Preview</button>
-          <a href="{% url 'tests' %}" class="btn btn-secondary mb-4" id="close-test" type="button">Close</a>
+        <div class="row header-buttons">
+          <div class="col-6 d-flex align-items-center">
+            <button class="btn btn-primary mb-4" type="submit"><i class="material-icons text-lg d-md-none">save</i><span class="d-none d-md-block">Save</span></button>
+            <a href="{% url 'tests' %}" class="btn btn-secondary mb-4" id="close-test" type="button"><i class="material-icons text-lg d-md-none">close</i><span class="d-none d-md-block">Close</span></a>
+          </div>
+          <div class="col-6 text-end" style="right: 10px; position: relative">
+            <a href="{% url 'preview_test' id=test.id %}" target="_blank" class="btn btn-success mb-4" type="button"><i class="material-icons text-lg">preview</i> Preview</a>
+            <button class="btn btn-info mb-4" id="publish" type="button"><i class="material-icons text-lg">cloud_upload</i> Publish</button>
+          </div>
         </div>
         <div>
           <ol type="1" id="questions">
@@ -62,7 +67,7 @@
                 </div>
                 <ol type="A">
                 {% for option in question.option_set.all %}
-                <li optionNumber="{{quesion.number}}-{{option.option_id}}">
+                <li optionNumber="{{question.number}}-{{option.option_id}}">
                   <div class="input-group input-group-outline mb-3">
                     <input type="text" class="form-control" name="{{question.number}}-{{option.option_id}}" placeholder="Option" required value="{{option.text}}"/>
                     <button type="button" class="btn btn-link me-auto border-0 btn-icons choose-ans">
@@ -89,10 +94,10 @@
         </div>
         <div class="text-center">
           <button type="button" id="add_question" class="btn bg-gradient-primary w-100 my-4 mb-2">
-            Add question
+            <i class="material-icons text-lg">add</i>Add question
           </button>
         </div>
-        <button class="btn btn-primary mb-4" type="submit">Save</button>
+        <button class="btn btn-primary mb-4" type="submit"><i class="material-icons text-lg">save</i> Save</button>
       </form>
     </div>
   </div>
