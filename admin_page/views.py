@@ -32,11 +32,6 @@ def del_photo(photo):
 
 @login_required
 @admin_login_required
-def dashboard(request):
-    return render(request, 'admin-page/dashboard.html')
-
-@login_required
-@admin_login_required
 def website(request):
     return render(request, 'admin-page/website.html')
 
@@ -426,7 +421,7 @@ def broadcast(request):
         message = request.POST.get('msg')
         to_email = request.POST.get('toEmail')
         to_WA = request.POST.get('toWA')
-        if message:
+        if message and subject:
             if to_email:
                 email_broadcast(subject, message, people_filter(people))
             if to_WA:

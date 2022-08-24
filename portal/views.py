@@ -13,7 +13,7 @@ def login_page(request):
         if user:
             login(request, user)
             if user.is_superuser:
-                return redirect('admin_dashboard')
+                return redirect('staff')
             return redirect('home')
         else:
             messages.error(request, "Incorrect ID or password")
