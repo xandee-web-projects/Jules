@@ -133,7 +133,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 LOGIN_URL = '/login'
-MEDIA_ROOT = 'uploads/'
+MEDIA_ROOT = '/uploads/'
+MEDIA_URL = 'uploads/'
 
 STATICFILES_DIRS = [
     BASE_DIR/ 'uploads'
