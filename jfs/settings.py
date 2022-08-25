@@ -133,11 +133,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 LOGIN_URL = '/login'
-MEDIA_ROOT = '/uploads/'
-MEDIA_URL = 'uploads/'
+MEDIA_ROOT = 'uploads/'
 
 STATICFILES_DIRS = [
-    '/uploads'
+    BASE_DIR/ 'uploads'
 ]
 STATIC_ROOT = BASE_DIR / "static"
 django_heroku.settings(locals())
