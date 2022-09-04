@@ -88,10 +88,10 @@ WSGI_APPLICATION = 'jfs.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd6rfmvubi9kcfr',
-        'HOST': "ec2-54-77-40-202.eu-west-1.compute.amazonaws.com",
-        "USER": "hwydsaupkkfzon",
-        "PASSWORD": "59917ff62efb0c65d1a2ab4d61a6a06111d884891ce30903caa0ceedec697dc2",
+        'NAME': 'kyljinlr',
+        'HOST': "chunee.db.elephantsql.com",
+        "USER": "kyljinlr",
+        "PASSWORD": env("DB_PASSWORD"),
         "PORT": "5432"
     }
 }
